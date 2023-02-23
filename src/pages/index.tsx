@@ -99,11 +99,11 @@ const HomePage: NextPage = ({ cookies }) => {
           if (state && state?.category)
             return (
               state.category === item.post.id && (
-                <PostCard.PostCard key={item.post.id} post={item.post} category={item.post.id} />
+                <PostCard key={item.post.id} post={item.post} category={item.post.id} />
               )
             );
 
-          return <PostCard.PostCard key={item.post.id} post={item.post} category={item.post.id} />;
+          return <PostCard key={item.post.id} post={item.post} category={item.post.id} />;
         })}
       </main>
     </div>
