@@ -6,8 +6,7 @@ import type { GetServerSideProps, NextApiRequest, NextPage } from 'next';
 import Head from 'next/head';
 import { ReactNode } from 'react';
 
-//@ts-ignore
-import PostCard from '@/components/organisms/PostCard';
+import { PostCard } from '@/components/organisms/PostCard';
 import { MainLayout } from '@/components/templates/MainLayout';
 
 // @ts-ig
