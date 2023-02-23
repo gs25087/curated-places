@@ -17,7 +17,7 @@ type Post {
   category: Int
   description: String
   id: Int
-  imageUrl: String
+  image: String
   latitude: Float
   longitude: Float
   title: String

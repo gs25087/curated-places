@@ -1,87 +1,63 @@
-// @ts-nocheck
+import { auth } from '@/auth/initFirebase';
 import firebase from 'firebase/app';
-import { useRouter } from 'next/router';
-import { useEffect, useState, useContext, createContext, FunctionComponent } from 'react';
+import {
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut
+} from 'firebase/auth';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-import 'firebase/auth';
-import initFirebase from './initFirebase';
-import { removeTokenCookies, setTokenCookies } from './tokenCookies';
-
-initFirebase();
-
-interface IAuthContext {
+/* interface AuthContextType {
+  //@ts-ignore
   user: firebase.User | null;
-  loading: boolean;
-  logout: () => void;
-  authenticated: boolean;
-}
+  //@ts-ignore
+  signup: (email: string, password: string) => Promise<firebase.auth.UserCredential>;
+} */
 
-const AuthContext = createContext<IAuthContext>({
-  user: null,
-  loading: true,
-  logout: () => null,
-  authenticated: false
-});
+// @ts-nocheck
+const AuthContext = createContext<any>({});
 
-export const AuthProvider: FunctionComponent = ({ children }) => {
+export const useAuth = () => useContext(AuthContext);
+
+export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
+  //@ts-ignore
   const [user, setUser] = useState<firebase.User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    return firebase.auth().onIdTokenChanged(async (user: { getIdToken: () => string }) => {
-      if (!user) {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser({
+          uid: currentUser.uid,
+          email: currentUser.email,
+          displayName: currentUser.displayName
+        });
+      } else {
         setUser(null);
-        setLoading(false);
-
-        return;
       }
-      const token = await user.getIdToken();
-      setUser(user);
       setLoading(false);
-      setTokenCookies(token);
     });
+
+    return () => unsubscribe();
   }, []);
 
-  const logout = async () => {
-    await firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        router.push('/');
-        removeTokenCookies();
-      })
-      .catch((error: { message: string | undefined }) => {
-        throw new Error(error.message);
-      });
+  const signup = (email: string, password: string) => {
+    return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  useEffect(() => {
-    const cancelAutheListener = firebase
-      .auth()
-      .onIdTokenChanged(async (user: { getIdToken: () => string }) => {
-        if (!user) {
-          setUser(null);
-          setLoading(false);
+  const login = (email: string, password: string) => {
+    return signInWithEmailAndPassword(auth, email, password);
+  };
 
-          return;
-        }
-        const token = await user.getIdToken();
-        setUser(user);
-        setLoading(false);
-        setTokenCookies(token);
-      });
-
-    return () => cancelAutheListener();
-  }, []);
+  const logout = async () => {
+    setUser(null);
+    await signOut(auth);
+  };
 
   return (
-    <AuthContext.Provider value={{ user, loading, logout, authenticated: !!user }}>
-      {children}
+    <AuthContext.Provider value={{ user, login, signup, logout, authenticated: !!user }}>
+      {loading ? null : children}
     </AuthContext.Provider>
   );
 };
-
-export function useAuth() {
-  return useContext(AuthContext);
-}
