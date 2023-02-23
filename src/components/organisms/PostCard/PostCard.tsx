@@ -13,10 +13,7 @@ interface IProps {
 }
 
 export const PostCard = ({ post, category }: IProps) => (
-  <div
-    key={post.id}
-    className={`w-full py-pageMargin ${selected?.id === post.id ? 'bg-lime-400' : ' '}`}
-  >
+  <div key={post.id} className={`w-full py-pageMargin`}>
     <div className="p-4 ">
       {/* rounded-lg shadow-lg */}
       <h2 className="text-xl">Lorem Ipsum</h2>
