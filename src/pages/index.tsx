@@ -14,15 +14,6 @@ function parseCookies(req: { headers: { cookie: any } }) {
   return cookie.parse(req ? req.headers.cookie || '' : document.cookie);
 }
 
-interface IPostData {
-  id: number;
-  title: string;
-}
-
-interface IPost {
-  post: IPostData;
-}
-
 const POSTS_QUERY = gql`
   query Nod($after: Int, $first: Int) {
     posts(after: $after, first: $first) {
@@ -94,7 +85,7 @@ const HomePage: NextPage = ({ cookies }) => {
       </Head>
 
       <main>
-        {data?.posts.edges.map((item: IPost) => {
+        {data?.posts.edges.map((item: any) => {
           if (state && state?.category)
             return (
               state.category === item.post.id && (
