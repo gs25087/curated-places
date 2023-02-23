@@ -9,7 +9,7 @@ interface IProps {
   post: NexusGenFieldTypeNames['Post'];
   // setSelected: (post: NexusGenFieldTypeNames['Post'] | null) => void;
   // selected: NexusGenFieldTypeNames['Post'] | null;
-  category: number;
+  category: { id: number; label: string };
 }
 
 export const PostCard = ({ post, category }: IProps) => (
