@@ -11,7 +11,7 @@ export const Post = objectType({
     t.float('longitude');
     t.string('address');
     t.string('description');
-    t.string('imageUrl');
+    t.string('image');
     t.int('category');
   }
 });

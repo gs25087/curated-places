@@ -1,8 +1,14 @@
+import { AppWrapper, useMapContext } from '@/context/MapContext/MapContext';
 import { gql, useQuery } from '@apollo/client';
 // @ts-expect-error
 import cookie from 'cookie';
 import type { GetServerSideProps, NextApiRequest, NextPage } from 'next';
 import Head from 'next/head';
+import { ReactNode } from 'react';
+
+//@ts-ignore
+import PostCard from '@/components/organisms/PostCard';
+import { MainLayout } from '@/components/templates/MainLayout';
 
 // @ts-ig
 function parseCookies(req: { headers: { cookie: any } }) {
@@ -31,6 +37,12 @@ const POSTS_QUERY = gql`
           latitude
           longitude
           title
+          image
+          address
+          id
+          longitude
+          latitude
+          description
         }
       }
     }
@@ -40,7 +52,7 @@ const POSTS_QUERY = gql`
 // @ts-ignore
 const HomePage: NextPage = ({ cookies }) => {
   const { data, loading, error } = useQuery(POSTS_QUERY);
-
+  const { state } = useMapContext();
   const setCookie = (name: string, value: string, days: number) => {
     let expires = '';
     if (days) {
@@ -63,10 +75,11 @@ const HomePage: NextPage = ({ cookies }) => {
 
   if (cookies.curated === undefined) {
     return (
-      <div>
+      <div className="m-32 ml-8">
+        Password
         <input
           type="password"
-          className="m-10 mx-auto border"
+          className="ml-4 rounded border border-black"
           onChange={(e) => handlePasswordChange(e)}
         />
       </div>
@@ -82,16 +95,27 @@ const HomePage: NextPage = ({ cookies }) => {
       </Head>
 
       <main>
-        <h1>Home page</h1>
-        {data?.posts.edges.map((item: IPost) => (
-          <div key={item.post.id}>
-            <h2>{item.post.title}</h2>
-          </div>
-        ))}
+        {data?.posts.edges.map((item: IPost) => {
+          if (state && state?.category)
+            return (
+              state.category === item.post.id && (
+                <PostCard.PostCard key={item.post.id} post={item.post} category={item.post.id} />
+              )
+            );
+
+          return <PostCard.PostCard key={item.post.id} post={item.post} category={item.post.id} />;
+        })}
       </main>
     </div>
   );
 };
+
+//@ts-ignore
+HomePage.getLayout = (page: ReactNode) => (
+  <AppWrapper>
+    <MainLayout>{page}</MainLayout>
+  </AppWrapper>
+);
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   // @ts-ignore

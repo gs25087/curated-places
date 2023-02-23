@@ -1,3 +1,4 @@
+import { AuthContextProvider } from '@/auth/useAuth';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from 'lib/apollo';
 import { AppProps } from 'next/app';
@@ -13,5 +14,9 @@ interface Props {
 export const MainProvider = ({ children }: Props) => {
   const apolloClient = useApollo();
 
-  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
+  return (
+    <AuthContextProvider>
+      <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
+    </AuthContextProvider>
+  );
 };

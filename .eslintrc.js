@@ -61,10 +61,11 @@ module.exports = {
       }
     ],
     '@typescript-eslint/ban-ts-ignore': 0,
+    '    @typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/ban-ts-comment': 'off',
 
     '@typescript-eslint/no-unused-vars': [
-      2,
+      1,
       {
         argsIgnorePattern: '^_'
       }

@@ -1,30 +1,28 @@
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
+
+import { Nav } from '@/components/organisms/Nav';
+
+import { navItems } from '@/lib/navItems';
 
 interface Props {
   children: ReactNode;
 }
 
-const links = [
-  { slug: '/', label: 'Home' },
-  { slug: '/custom-layout', label: 'Custom layout' }
-];
+export const MainLayout = ({ children }: Props) => {
+  const router = useRouter();
+  const isHome = router.pathname === '/';
 
-// This is the place responsible for wrapping your app.
-// Add here components like Footer, Nav etc.
-export const MainLayout = ({ children }: Props) => (
-  <div>
-    <header className="bg-slate-900 p-4">
-      <ul className="flex items-center gap-10 text-gray-50">
-        {links.map(({ slug, label }) => (
-          <li key={slug}>
-            <Link href={slug} className="inline-block p-2 transition-colors hover:text-green-300">
-              {label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </header>
-    <main className="bg-[#FCFCFC]">{children}</main>;
-  </div>
-);
+  return (
+    <div className="relative mx-auto max-w-lg md:max-w-md">
+      <header>
+        <Nav navItems={navItems} />
+      </header>
+      <main
+        className={` h-main ${isHome ? 'mt-homeNavHeight' : 'mt-notHomeNavHeight p-pageMargin'} `}
+      >
+        {children}
+      </main>
+    </div>
+  );
+};
