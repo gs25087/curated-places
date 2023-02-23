@@ -7,11 +7,12 @@ import { Tag } from '@/components/atoms/Tag';
 
 interface IProps {
   post: NexusGenFieldTypeNames['Post'];
-  setSelected: (post: NexusGenFieldTypeNames['Post'] | null) => void;
-  selected: NexusGenFieldTypeNames['Post'] | null;
+  // setSelected: (post: NexusGenFieldTypeNames['Post'] | null) => void;
+  // selected: NexusGenFieldTypeNames['Post'] | null;
+  category: number;
 }
 
-export const PostCard = ({ post, selected, category }: IProps) => (
+export const PostCard = ({ post, category }: IProps) => (
   <div
     key={post.id}
     className={`w-full py-pageMargin ${selected?.id === post.id ? 'bg-lime-400' : ' '}`}
