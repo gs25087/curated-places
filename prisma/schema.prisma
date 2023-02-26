@@ -18,10 +18,43 @@ model Post {
   longitude Float
   title     String
   description String
-  category  Int
   address   String
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  Int?
+  published Boolean  @default(false)
+  tag  Tag?    @relation(fields: [tagId], references: [id])
+  tagId  Int?
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
   @@index([userId], name: "posts.userId")
   @@map(name: "posts")
+}
+
+
+
+model User {
+  id        Int      @id @default(autoincrement())
+  firebaseId String? @unique
+  createdAt DateTime @default(now())
+  email     String   @unique
+  name      String?
+  role      Role     @default(USER)
+  posts     Post[]
+  @@map(name: "users")
+
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  name      String?
+  posts     Post[]
+  @@map(name: "tags")
+}
+
+
+enum Role {
+  USER
+  CONTRUBUTOR
+  ADMIN
 }

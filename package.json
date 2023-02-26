@@ -32,7 +32,9 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.9",
+    "@hookform/resolvers": "^2.9.11",
     "@prisma/client": "^4.10.1",
+    "@tailwindcss/forms": "^0.5.3",
     "@types/firebase": "^3.2.1",
     "apollo-server-micro": "^3.11.1",
     "class-validator": "^0.14.0",
@@ -51,10 +53,13 @@
     "react": "18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-firebaseui": "^6.0.0",
+    "react-hook-form": "^7.43.2",
     "react-icons": "^4.7.1",
     "reflect-metadata": "^0.1.13",
-    "type-graphql": "^1.1.1"
+    "type-graphql": "^1.1.1",
+    "yup": "^1.0.0"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "6.5.16",

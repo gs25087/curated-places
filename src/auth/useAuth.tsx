@@ -1,12 +1,24 @@
 import { auth } from '@/auth/initFirebase';
+import { SignUpFormData } from '@/pages/signup';
 import firebase from 'firebase/app';
 import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut
+  signOut,
+  UserInfo,
+  User,
+  updateProfile
 } from 'firebase/auth';
 import { createContext, useContext, useEffect, useState } from 'react';
+
+import { getDateString } from '@/lib/helpers';
+
+interface newUser {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+}
 
 /* interface AuthContextType {
   //@ts-ignore
@@ -22,7 +34,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
   //@ts-ignore
-  const [user, setUser] = useState<firebase.User | null>(null);
+  const [user, setUser] = useState<newUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -42,8 +54,44 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
     return () => unsubscribe();
   }, []);
 
-  const signup = (email: string, password: string) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  const callAPI = async (user: User, data: SignUpFormData) => {
+    const res = await fetch('/api/addUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        firebaseId: user.uid,
+        email: user.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        createdAt: getDateString(user.metadata.creationTime),
+        photoUrl: user.photoURL,
+        databaseId: process.env.NEXT_PUBLIC_DATABASE_ID
+      })
+    });
+    const json = await res.json();
+  };
+
+  const signup = async (data: SignUpFormData) => {
+    try {
+      // Create a new user with email and password
+      const { user } = await createUserWithEmailAndPassword(auth, data.email, data.password);
+      // TODO callAPI(user, data);
+
+      // TODO Update the user's display name and photo URL
+      // await updateProfile(user, {
+      //   displayName: data.firstName + ' ' + data.lastName,
+      //   photoURL: 'https:www.dlsndgl.com' // cloudinary url
+      // });
+
+      // Return the created user
+      return user;
+    } catch (error) {
+      // @ts-ignore
+      console.error('Error creating user:', error);
+      throw error;
+    }
   };
 
   const login = (email: string, password: string) => {

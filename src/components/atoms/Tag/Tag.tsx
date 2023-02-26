@@ -27,12 +27,12 @@ export const Tag = ({ label, shadow, border, icon, size, id, filter }: IProps): 
 
   return (
     <div
-      className={`py-0.25 mr-0.5 flex  items-center gap-x-1 rounded-full border border-lime-400 bg-white px-2.5 last:mr-0
+      className={`py-0.25 mr-0.5 flex  items-center gap-x-1 rounded-full border border-primary bg-white px-2.5 last:mr-0
 				${size ? padding[size] : padding['sm']}
 				text-${size ? size : 'sm'}  
 				${filter ? 'cursor-pointer' : ''} 
 				${shadow ? 'shadow-md' : ''} 
-        ${border ? 'border border-lime-400 bg-lime-400' : ''} `}
+        ${border ? 'border border-primary bg-primary' : ''} `}
       onClick={() => filter && dispatch({ type: ACTIONS.SET_CATEGORY, payload: id })}
     >
       {label}
