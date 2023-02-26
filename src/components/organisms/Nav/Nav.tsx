@@ -25,7 +25,7 @@ export const Nav: FunctionComponent<IProps> = ({ navItems }): JSX.Element => {
       <div className="flex h-navHeight w-full justify-between px-pageMargin">
         <Link href={'/'}>
           <div className="text-highlight-light color-black flex items-center py-pageMargin pr-3 text-xl transition hover:scale-[0.98]">
-            <div className="rounded-full bg-lime-400 px-3 py-0.5 font-bold shadow-md">
+            <div className="rounded-full bg-primary px-3 py-0.5 font-bold shadow-md">
               CU💎Ra💫T💕d
             </div>
           </div>

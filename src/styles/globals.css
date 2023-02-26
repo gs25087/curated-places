@@ -12,3 +12,7 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+input:-internal-autofill-selected {
+  @apply bg-white !important;
+}

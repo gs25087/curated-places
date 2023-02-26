@@ -12,7 +12,6 @@ export const Post = objectType({
     t.string('address');
     t.string('description');
     t.string('image');
-    t.int('category');
   }
 });
 
