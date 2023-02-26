@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 import { Button } from '@/components/molecules/Button';
+import { Input } from '@/components/molecules/Input';
 
 interface FileWithPathPreview extends FileWithPath {
   preview?: string;
@@ -134,123 +135,60 @@ const Signup = () => {
 
   return (
     <form onSubmit={handleSubmit(handleSignup)}>
-      <div>
-        <label htmlFor="email" className="block text-xs text-black">
-          Email address
-        </label>
-        <div className="mt-1">
-          <input
-            type="email"
-            {...register('email')}
-            className={`${
-              errors.email ? 'border-red-500' : 'border-black'
-            } block w-full  border-b  text-xs focus:outline-none`}
-            placeholder="you@example.com"
-          />
-          {errors.email && (
-            <p className="mt-2 text-xs text-red-600" id="email-error">
-              {errors.email.message}
-            </p>
-          )}
-        </div>
-      </div>
-
+      <Input
+        name="email"
+        type={'email'}
+        label="Email address"
+        register={register}
+        errors={errors.email}
+        required
+        placeholder={'you@email.com'}
+      />
       <div className="flex w-full gap-x-4">
-        <div className="mt-6 w-1/2">
-          <label htmlFor="firstName" className="block text-xs text-black">
-            First Name
-          </label>
-          <div className="mt-1">
-            <input
-              type="text"
-              {...register('firstName')}
-              className={`${
-                errors.firstName ? 'border-red-500' : 'border-black'
-              } block w-full  border-b  text-xs focus:outline-none`}
-              placeholder="First Name"
-            />
-            {errors.firstName && (
-              <p className="mt-2 text-xs text-red-600" id="firstName-error">
-                {errors.firstName.message}
-              </p>
-            )}
-          </div>
-        </div>
-        <div className="mt-6 w-1/2">
-          <label htmlFor="lastName" className="block text-xs text-black">
-            Last Name
-          </label>
-          <div className="mt-1">
-            <input
-              type="text"
-              {...register('lastName')}
-              className={`${
-                errors.lastName ? 'border-red-500' : 'border-black'
-              } block w-full  border-b  text-xs focus:outline-none`}
-              placeholder="Last Name"
-            />
-            {errors.lastName && (
-              <p className="mt-2 text-xs text-red-600" id="lastName-error">
-                {errors.lastName.message}
-              </p>
-            )}
-          </div>
-        </div>
+        <Input
+          name="firstName"
+          label="First Name"
+          register={register}
+          errors={errors.firstName}
+          required
+          placeholder={'First Name'}
+          classes={['w-1/2']}
+        />
+        <Input
+          name="lastName"
+          label="Last Name"
+          register={register}
+          errors={errors.lastName}
+          placeholder={'Last Name'}
+          classes={['w-1/2']}
+        />
       </div>
-
       <div className="flex w-full gap-x-4">
-        <div className="mt-6 w-1/2">
-          <label htmlFor="password" className="block text-xs text-black text-black">
-            Password
-          </label>
-          <div className="mt-1">
-            <input
-              type="password"
-              {...register('password')}
-              className={`${
-                errors.password ? 'border-red-500' : 'border-black'
-              } block w-full  border-b text-xs focus:outline-none`}
-              placeholder="********"
-            />
-            {errors.password && (
-              <p className="mt-2 text-xs text-red-600" id="password-error">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-        </div>
+        <Input
+          name="password"
+          type={'password'}
+          label="Password"
+          register={register}
+          errors={errors.password}
+          required
+          classes={['w-1/2']}
+        />
 
-        <div className="mt-6 w-1/2">
-          <label htmlFor="confirmPassword" className="block text-xs text-black text-black">
-            Confirm password
-          </label>
-          <div className="mt-1">
-            <input
-              type="password"
-              {...register('confirmPassword')}
-              className={`${
-                errors.confirmPassword ? 'border-red-500' : 'border-black'
-              } block w-full  border-b  text-xs focus:outline-none`}
-              placeholder="********"
-            />
-            {errors.confirmPassword && (
-              <p className="mt-2 text-xs text-red-600" id="confirmPassword-error">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div>
-        </div>
+        <Input
+          name="password"
+          type={'password'}
+          label="Confirm password"
+          register={register}
+          errors={errors.confirmPassword}
+          required
+          classes={['w-1/2']}
+        />
       </div>
-
       <div className="mt-6">
-        {/*    <label htmlFor="avatar" className="block text-xs text-black ">
-          Profile picture
-        </label> */}
         <div className="mt-4">
           <FileUpload onFileChange={setAvatarFile} />
         </div>
       </div>
-
       <div className="mt-16">
         <Button label="Sign up" type="submit" />
       </div>
