@@ -85,8 +85,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      initialSession: session,
-      user: session.user,
       postData: postData ?? [],
       tagData: tags
     }
