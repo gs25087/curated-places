@@ -83,10 +83,7 @@ export const Avatar = ({ uid, url, size, onUpload }) => {
           label={uploading ? 'Uploading ...' : 'Edit picture'}
         />
         <input
-          style={{
-            visibility: 'hidden',
-            position: 'absolute'
-          }}
+          className="absolute hidden w-0"
           type="file"
           id="single"
           accept="image/*"

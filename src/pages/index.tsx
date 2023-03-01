@@ -1,6 +1,5 @@
 import { AppWrapper, useMapContext } from '@/context/MapContext/MapContext';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import cookie from 'cookie';
 import type { GetServerSideProps, NextApiRequest, NextApiResponse, NextPage } from 'next';
 import Head from 'next/head';
 import { ReactNode } from 'react';
@@ -11,45 +10,11 @@ import { MainLayout } from '@/components/templates/MainLayout';
 import { getTagsFromCookies, ITag, setTagsToCookies } from '@/lib/tags';
 
 // @ts-ignore
-function parseCookies(req: { headers: { cookie } }) {
-  return cookie.parse(req ? req.headers.cookie || '' : document.cookie);
-}
-
-// @ts-ignore
-const HomePage: NextPage = ({ cookies, postData, tagData }) => {
+const HomePage: NextPage = ({ postData, tagData }) => {
   const { state } = useMapContext();
-  const setCookie = (name: string, value: string, days: number) => {
-    let expires = '';
-    if (days) {
-      const date = new Date();
-      date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-      expires = '; expires=' + date.toUTCString();
-    }
-    window.document.cookie = name + '=' + (value || '') + expires + '; path=/';
-  };
-
-  const handlePasswordChange = (e: any) => {
-    if (e.target.value === process.env.NEXT_PUBLIC_PASSWORD) {
-      setCookie('curated', e.target.value, 700);
-      window.location.reload();
-    }
-  };
 
   //if (loading) return <div>Loading...</div>;
   //if (error) return <div>Error: {error.message}</div>;
-
-  if (cookies.curated === undefined) {
-    return (
-      <div className="m-32 ml-8">
-        Password
-        <input
-          type="password"
-          className="ml-4 rounded border border-black"
-          onChange={(e) => handlePasswordChange(e)}
-        />
-      </div>
-    );
-  }
 
   return (
     <div>
@@ -83,12 +48,8 @@ HomePage.getLayout = (page: ReactNode) => (
 );
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // @ts-ignore
   const req = ctx.req as NextApiRequest;
   const res = ctx.res as NextApiResponse;
-
-  //@ts-ignore
-  const cookies = parseCookies(req);
 
   const supabase = createServerSupabaseClient(ctx);
 
@@ -139,7 +100,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       initialSession: session,
       user: session.user,
       postData: postData ?? [],
-      cookies,
       tagData: tags
     }
   };

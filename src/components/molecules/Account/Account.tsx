@@ -22,7 +22,8 @@ export const Account = (/* { session } */) => {
   const user = useUser();
   const [loading, setLoading] = useState(true);
 
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [successMessage, setSuccessMessage] = useState<string>('');
   const [avatar_url, setAvatarUrl] = useState(null);
 
   const schema = yup.object().shape({
@@ -56,13 +57,12 @@ export const Account = (/* { session } */) => {
 
       if (data) {
         reset(data);
-        //@ts-ignore
+        setSuccessMessage('');
         setErrorMessage('');
       }
-      // eslint-disable-next-line no-useless-catch
-    } catch (error) {
-      //@ts-ignore
-      setErrorMessage(error);
+    } catch (error: unknown) {
+      // @ts-ignore
+      console.log(error.message);
     } finally {
       setLoading(false);
     }
@@ -80,18 +80,14 @@ export const Account = (/* { session } */) => {
 
       const { error } = await supabase.from('profiles').upsert(updates);
       if (error) throw error;
-      //@ts-nocheck
-      console.log('Profile updated!');
+
       //@ts-ignore
       setErrorMessage('');
 
       reset(data);
-    } catch (error) {
-      //@ts-nocheck @ts-ignore
-      console.log('Error updating the data!');
+    } catch (error: unknown) {
+      setErrorMessage('Error updating the data!');
 
-      //@ts-ignore
-      console.log(error.code);
       //@ts-ignore
       if (error.code === '23505') {
         //@ts-ignore
@@ -116,13 +112,12 @@ export const Account = (/* { session } */) => {
         const { error } = await supabase.from('profiles').upsert(updates);
         if (error) throw error;
         //@ts-nocheck
-        console.log('Profile updated!');
+        setSuccessMessage('Profile updated!');
+        setErrorMessage('');
       } catch (error) {
         //@ts-nocheck
-        console.log('Error updating the data!');
-
-        //@ts-nocheck
-        console.log(error);
+        setSuccessMessage('');
+        setErrorMessage('Error updating the data!');
       } finally {
         setLoading(false);
       }
@@ -170,7 +165,7 @@ export const Account = (/* { session } */) => {
             <Avatar
               uid={user?.id}
               url={avatar_url}
-              size={150}
+              size={'7rem'}
               onUpload={(url: string) => {
                 //@ts-ignore
                 setAvatarUrl(url);

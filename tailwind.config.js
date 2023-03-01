@@ -25,9 +25,9 @@ module.exports = {
       spacing: {
         navHeight: '3.15rem',
         catNavHeight: '2.5rem',
-        homeNavHeight: '7.5rem',
+        homeNavHeight: '6rem',
         notHomeNavHeight: '4.5rem',
-        pageMargin: '.5rem',
+        pageMargin: '.8rem',
         box: '.5rem',
         main: 'calc(100vh - 3.15rem)',
         fieldMT: '1.5rem'
@@ -42,7 +42,7 @@ module.exports = {
         '2xs': '.5rem',
         xs: '.75rem',
         sm: '.875rem',
-        base: '1rem',
+        base: '(var(--baseFontSize), 1rem)',
         lg: '1.125rem',
         xl: '1.25rem',
         '2xl': '1.5rem'

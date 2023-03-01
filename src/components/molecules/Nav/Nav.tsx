@@ -29,15 +29,15 @@ export const Nav: FunctionComponent<IProps> = ({ navItems }): JSX.Element => {
           </div>
         </Link>
         <div className="py-pageMargin text-lg italic">
-          <div className="py-1.5 pr-3">Berlin</div>
+          <div className=" pr-3">Berlin</div>
         </div>
         <div className="flex justify-between">
           {navItems.map(
             (item) => (
               /*               (!item.authRequired || (authenticated && item.authRequired)) && (
-               */ <Link key={item.href} href={item.href}>
-                <div className="text-highlight-light color-black flex items-center py-3 px-1 text-xl transition hover:scale-[0.98]">
-                  <item.icon size={24} />
+               */ <Link key={item.href} href={item.href} className="flex items-center">
+                <div className="text-highlight-light color-black flex items-center px-1 text-xl transition hover:scale-[0.98]">
+                  <item.icon size={28} />
                 </div>
               </Link>
             )

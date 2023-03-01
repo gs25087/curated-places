@@ -78,7 +78,7 @@ export const PostForm = ({ post }: IProps) => {
       if (error) throw error;
       //@ts-nocheck
       console.log('Post updated!');
-    } catch (error) {
+    } catch (error: unknown) {
       //@ts-nocheck
       console.log('Error updating the data!');
       //@ts-nocheck

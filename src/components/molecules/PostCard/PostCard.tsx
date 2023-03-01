@@ -16,25 +16,12 @@ export const PostCard = ({ post, tags }: IProps) => (
   <div key={post.id} className={`w-full py-pageMargin`}>
     <div className="p-4 ">
       {/* rounded-lg shadow-lg */}
-      <h2 className="text-xl">Lorem Ipsum</h2>
-      <Image
-        className="max-h-48 w-full rounded-lg object-cover"
-        cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
-        publicId={post.image}
-        secure
-        dpr="auto"
-        quality="auto"
-        width={350}
-        height={Math.floor((9 / 16) * 350)}
-        crop="fill"
-        gravity="auto"
-        alt={post.title}
-      />
+      <h2 className="text-xl">{post.title}</h2>
+      <div className="h-32 max-h-48 w-full rounded-lg bg-primary-100 object-cover"></div>
+
       <div className="flex items-start justify-between py-2">
         <div className="mr-pageMargin text-sm">Lorem ipsum short description um short desc</div>
-        {tags &&
-          tags.length > 0 &&
-          tags.map((tagId) => <Tag key={tagId} border={true} id={tagId} />)}
+        {tags && tags.length > 0 && tags.map((tagId) => <Tag key={tagId} id={tagId} />)}
       </div>
     </div>
   </div>
