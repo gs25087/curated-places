@@ -1,8 +1,7 @@
-import { AuthContextProvider } from '@/auth/useAuth';
-import { ApolloProvider } from '@apollo/client';
-import { useApollo } from 'lib/apollo';
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { AppProps } from 'next/app';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -11,12 +10,12 @@ interface Props {
 
 // This is the place responsible for grouping all providers from the app
 
-export const MainProvider = ({ children }: Props) => {
-  const apolloClient = useApollo();
+export const MainProvider = ({ children, pageProps }: Props) => {
+  const [supabase] = useState(() => createBrowserSupabaseClient());
 
   return (
-    <AuthContextProvider>
-      <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
-    </AuthContextProvider>
+    <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
+      {children}
+    </SessionContextProvider>
   );
 };

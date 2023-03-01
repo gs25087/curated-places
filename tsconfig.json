@@ -13,6 +13,7 @@
       "@/lib/*": ["lib/*"],
       "@/hooks/*": ["./src/hooks/*"],
       "@/styles/*": ["./src/styles/*"],
+      "@/styles/atoms*": ["./src/components/atoms/*"],
       "@/mocks/*": ["./__mocks__/*"],
       "@/tests/*": ["./.jest/*"]
     },

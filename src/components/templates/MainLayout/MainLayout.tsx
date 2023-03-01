@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 
-import { Nav } from '@/components/organisms/Nav';
+import { Nav } from '@/components/molecules';
 
 import { navItems } from '@/lib/navItems';
 
@@ -14,7 +14,7 @@ export const MainLayout = ({ children }: Props) => {
   const isHome = router.pathname === '/';
 
   return (
-    <div className="relative mx-auto max-w-lg md:max-w-md">
+    <div className="relative mx-auto max-w-full md:max-w-md">
       <header>
         <Nav navItems={navItems} />
       </header>

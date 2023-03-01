@@ -1,31 +1,32 @@
-import { loadIdToken } from '@/auth/firebaseAdmin';
-import { useAuth } from '@/auth/useAuth';
-import { GetServerSideProps, NextApiRequest } from 'next';
+import { createServerSupabaseClient, Session, User } from '@supabase/auth-helpers-nextjs';
+import { GetServerSideProps } from 'next';
 
-// import Layout from "src/components/layout";
-// import PostForm from '@/components/organisms/postForm';
+import { PostForm } from '@/components/molecules/';
 
-export default function Add() {
-  const { authenticated } = useAuth();
-  //const { data, loading, error } = useQuery(POSTS_QUERY);
+export default function Add({ user }: Session & { user: User }): JSX.Element {
+  if (!user) return <div>Not authenticated</div>;
 
-  if (!authenticated) {
-    return <div>Not authenticated</div>;
-  }
-
-  if (authenticated) return <div>Post add form</div>;
+  return <PostForm />;
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
-  const uid = await loadIdToken(req as NextApiRequest);
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const supabase = createServerSupabaseClient(ctx);
+  const {
+    data: { session }
+  } = await supabase.auth.getSession();
 
-  if (!uid) {
-    res.setHeader('location', '/login');
-    res.statusCode = 302;
-    res.end();
-  }
+  if (!session)
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    };
 
   return {
-    props: {}
+    props: {
+      initialSession: session,
+      user: session.user
+    }
   };
 };

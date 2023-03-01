@@ -7,18 +7,19 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#9AE723',
-          DARK: '#182604',
-          50: '#E6F9C9',
-          100: '#DEF7B6',
-          200: '#CDF391',
-          300: '#BCEF6D',
-          400: '#ABEB48',
-          500: '#9AE723',
-          600: '#7BBD15',
-          700: '#5A8B0F',
-          800: '#39580A',
-          900: '#182604'
+          DEFAULT: '#B9FEB5',
+          LIGHT: '#DFFFDE',
+          DARK: '#13FC04',
+          50: '#F2FFF2',
+          100: '#DFFFDE',
+          200: '#B9FEB5',
+          300: '#93FE8D',
+          400: '#6DFD64',
+          500: '#47FD3C',
+          600: '#13FC04',
+          700: '#0DC702',
+          800: '#0A8F01',
+          900: '#065801'
         }
       },
       spacing: {
@@ -28,7 +29,8 @@ module.exports = {
         notHomeNavHeight: '4.5rem',
         pageMargin: '.5rem',
         box: '.5rem',
-        main: 'calc(100vh - 3.15rem)'
+        main: 'calc(100vh - 3.15rem)',
+        fieldMT: '1.5rem'
       },
       zIndex: {
         mapButton: '59',

@@ -1,0 +1,1 @@
+export { PlacePhotos } from './PlacePhotos';

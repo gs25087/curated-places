@@ -1,20 +1,29 @@
 import { useMapContext } from '@/context/MapContext/MapContext';
 import { ACTIONS } from '@/context/MapContext/MapReducer';
-import { ReactElement } from 'react';
+import cookie from 'cookie';
+import { ReactElement, useEffect, useState } from 'react';
+
+import { TAGS_KEY } from '@/lib/tags';
 
 interface IProps {
-  label: string;
   shadow?: boolean;
   border?: boolean;
   icon?: ReactElement;
   size?: string;
   filter?: boolean;
-  id?: number;
+  id: number;
 }
 
 type Padding = {
   [key: string]: string;
 };
+
+interface Tag {
+  id: number;
+  label: string;
+  created_at: string;
+  posts: number[];
+}
 
 const padding: Padding = {
   sm: 'px-2.5 py-0.25',
@@ -22,20 +31,40 @@ const padding: Padding = {
   lg: 'px-3.5 py-0.75'
 };
 
-export const Tag = ({ label, shadow, border, icon, size, id, filter }: IProps): ReactElement => {
-  const { dispatch } = useMapContext();
+export const Tag = ({ shadow, border, icon, size, id, filter }: IProps): JSX.Element => {
+  const { state, dispatch } = useMapContext();
+  const [tagItem, setTagItem] = useState<Tag>();
+  useEffect(() => {
+    // This code will only run client-side
+    const tagsCookie = cookie.parse(document.cookie)[TAGS_KEY];
+    const tagItems = JSON.parse(tagsCookie);
+    //@ts-ignore
+    const tag: Tag = Object.values(tagItems).find((tag: Tag) => {
+      return tag.id === id;
+    });
+    setTagItem(tag);
+  }, []);
 
   return (
     <div
-      className={`py-0.25 mr-0.5 flex  items-center gap-x-1 rounded-full border border-primary bg-white px-2.5 last:mr-0
+      className={`py-0.25 mr-0.5 flex  items-center gap-x-1 whitespace-nowrap rounded-full border border-primary  px-2.5 last:mr-0
 				${size ? padding[size] : padding['sm']}
 				text-${size ? size : 'sm'}  
 				${filter ? 'cursor-pointer' : ''} 
 				${shadow ? 'shadow-md' : ''} 
-        ${border ? 'border border-primary bg-primary' : ''} `}
-      onClick={() => filter && dispatch({ type: ACTIONS.SET_CATEGORY, payload: id })}
+        ${border ? 'border border-primary bg-primary' : ''} 
+        ${state.tag === id ? 'bg-primary-LIGHT' : 'bg-white'} `}
+      onClick={() => {
+        if (filter) {
+          if (state.tag === id) {
+            dispatch({ type: ACTIONS.SET_TAG, payload: null });
+          } else {
+            dispatch({ type: ACTIONS.SET_TAG, payload: id });
+          }
+        }
+      }}
     >
-      {label}
+      {tagItem?.label}
       {icon}
     </div>
   );

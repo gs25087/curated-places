@@ -1,0 +1,7 @@
+.input {
+  @apply block w-full  border-b  text-sm leading-6 placeholder:text-gray-400 focus:outline-none;
+}
+
+.fieldWrapper {
+  @apply mt-6;
+}

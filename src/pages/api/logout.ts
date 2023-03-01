@@ -1,9 +1,7 @@
-// @ts-expect-error
 import cookie from 'cookie';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default (req: NextApiRequest, res: NextApiResponse) => {
+const logout = (req: NextApiRequest, res: NextApiResponse) => {
   res.setHeader(
     'Set-Cookie',
     cookie.serialize('token', '', {
@@ -16,3 +14,5 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
   );
   res.status(200).json({ success: true });
 };
+
+export default logout;

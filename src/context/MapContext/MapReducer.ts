@@ -1,23 +1,23 @@
 interface IAction {
   type: string;
-  payload: number;
+  payload: number | null;
 }
 
 export const initialState = {
-  category: null
+  tag: null
 };
 
-export const MapReducer = (state: { category: number }, action: IAction) => {
+export const MapReducer = (state: { tag: number }, action: IAction) => {
   switch (action.type) {
-    case ACTIONS.SET_CATEGORY: {
+    case ACTIONS.SET_TAG: {
       return {
         ...state,
-        category: action.payload
+        tag: action.payload
       };
     }
   }
 };
 
 export const ACTIONS = {
-  SET_CATEGORY: 'SET_CATEGORY'
+  SET_TAG: 'SET_TAG'
 };

@@ -1,47 +1,22 @@
 import { AppWrapper, useMapContext } from '@/context/MapContext/MapContext';
-import { gql, useQuery } from '@apollo/client';
-// @ts-expect-error
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import cookie from 'cookie';
-import type { GetServerSideProps, NextApiRequest, NextPage } from 'next';
+import type { GetServerSideProps, NextApiRequest, NextApiResponse, NextPage } from 'next';
 import Head from 'next/head';
 import { ReactNode } from 'react';
 
-import { PostCard } from '@/components/organisms/PostCard/PostCard';
+import { PostCard, TagBar } from '@/components/molecules/';
 import { MainLayout } from '@/components/templates/MainLayout';
 
-// @ts-ig
-function parseCookies(req: { headers: { cookie: any } }) {
+import { getTagsFromCookies, ITag, setTagsToCookies } from '@/lib/tags';
+
+// @ts-ignore
+function parseCookies(req: { headers: { cookie } }) {
   return cookie.parse(req ? req.headers.cookie || '' : document.cookie);
 }
 
-const POSTS_QUERY = gql`
-  query Nod($after: Int, $first: Int) {
-    posts(after: $after, first: $first) {
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-      edges {
-        cursor
-        post {
-          latitude
-          longitude
-          title
-          image
-          address
-          id
-          longitude
-          latitude
-          description
-        }
-      }
-    }
-  }
-`;
-
 // @ts-ignore
-const HomePage: NextPage = ({ cookies }) => {
-  const { data, loading, error } = useQuery(POSTS_QUERY);
+const HomePage: NextPage = ({ cookies, postData, tagData }) => {
   const { state } = useMapContext();
   const setCookie = (name: string, value: string, days: number) => {
     let expires = '';
@@ -60,8 +35,8 @@ const HomePage: NextPage = ({ cookies }) => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  //if (loading) return <div>Loading...</div>;
+  //if (error) return <div>Error: {error.message}</div>;
 
   if (cookies.curated === undefined) {
     return (
@@ -83,17 +58,17 @@ const HomePage: NextPage = ({ cookies }) => {
         <meta name="description" content="Hand picked places" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main>
-        {data?.posts.edges.map((item: any) => {
-          if (state && state?.category)
+      <main className="relative">
+        {tagData && tagData.length > 0 && <TagBar tags={tagData} />}
+        {postData.map((post: any) => {
+          if (state && state?.tag)
             return (
-              state.category === item.post.id && (
-                <PostCard key={item.post.id} post={item.post} category={item.post.id} />
+              post?.tags?.includes(state.tag) && (
+                <PostCard key={post.id} post={post} tags={post.tags} />
               )
             );
 
-          return <PostCard key={item.post.id} post={item.post} category={item.post.id} />;
+          return <PostCard key={post.id} post={post} tags={post.tags} />;
         })}
       </main>
     </div>
@@ -107,15 +82,65 @@ HomePage.getLayout = (page: ReactNode) => (
   </AppWrapper>
 );
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // @ts-ignore
-  const cookies = parseCookies(req as NextApiRequest);
+  const req = ctx.req as NextApiRequest;
+  const res = ctx.res as NextApiResponse;
 
-  // And then get element from cookie by name
+  //@ts-ignore
+  const cookies = parseCookies(req);
+
+  const supabase = createServerSupabaseClient(ctx);
+
+  async function fetchTags(): Promise<ITag[]> {
+    const { data: tags } = await supabase.from('tags').select('*');
+
+    //@ts-ignore
+    return tags;
+  }
+
+  async function getTags(req: NextApiRequest, res: NextApiResponse): Promise<ITag[]> {
+    let tags = getTagsFromCookies(req);
+    if (!tags) {
+      tags = await fetchTags();
+      setTagsToCookies(res, tags);
+    }
+
+    return tags;
+  }
+
+  let tags: ITag[];
+
+  // Get tags from cookies or fetch them from the server
+  try {
+    tags = await getTags(req, res);
+  } catch (error) {
+    console.error(error);
+    tags = [];
+  }
+
+  const {
+    data: { session }
+  } = await supabase.auth.getSession();
+
+  if (!session)
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    };
+
+  // Run queries with RLS on the server
+  const { data: postData } = await supabase.from('posts').select('*');
 
   return {
     props: {
-      cookies: cookies
+      initialSession: session,
+      user: session.user,
+      postData: postData ?? [],
+      cookies,
+      tagData: tags
     }
   };
 };
