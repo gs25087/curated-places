@@ -80,18 +80,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     tags = [];
   }
 
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
-
-  if (!session)
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false
-      }
-    };
-
   // Run queries with RLS on the server
   const { data: postData } = await supabase.from('posts').select('*');
 
