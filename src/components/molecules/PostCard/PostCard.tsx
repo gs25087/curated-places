@@ -19,8 +19,7 @@ export const PostCard = ({ post, tags }: IProps) => (
       <h2 className="text-xl">{post.title}</h2>
       <div className="h-32 max-h-48 w-full rounded-lg bg-primary-100 object-cover"></div>
 
-      <div className="flex items-start justify-between py-2">
-        <div className="mr-pageMargin text-sm">Lorem ipsum short description um short desc</div>
+      <div className="flex items-start justify-end py-2">
         {tags && tags.length > 0 && tags.map((tagId) => <Tag key={tagId} id={tagId} />)}
       </div>
     </div>

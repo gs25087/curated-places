@@ -1,7 +1,7 @@
-import { IoMdAdd, IoMdHome, IoMdPerson } from 'react-icons/io';
+import { CiCirclePlus, CiUser } from 'react-icons/ci';
 
 export const navItems = [
   /*   { href: '/', icon: IoMdHome, label: 'Home', authRequired: false },
-   */ { href: '/posts/add', icon: IoMdAdd, label: 'New post', authRequired: true },
-  { href: '/register/', icon: IoMdPerson, label: 'Profile', authRequired: true }
+   */ { href: '/posts/add', icon: CiCirclePlus, label: 'New post', authRequired: true },
+  { href: '/register/', icon: CiUser, label: 'Profile', authRequired: true }
 ];

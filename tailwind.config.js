@@ -28,6 +28,9 @@ module.exports = {
         homeNavHeight: '6rem',
         notHomeNavHeight: '4.5rem',
         pageMargin: '.8rem',
+        pageMarginM: '1.6rem',
+        pageMarginL: '3rem',
+        logoHeight: '2.13rem',
         box: '.5rem',
         main: 'calc(100vh - 3.15rem)',
         fieldMT: '1.5rem'

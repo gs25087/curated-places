@@ -1,4 +1,5 @@
 // import { useAuth } from '@/auth/useAuth';
+import { useUser } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FunctionComponent } from 'react';
@@ -14,8 +15,7 @@ interface IProps {
 
 export const Nav: FunctionComponent<IProps> = ({ navItems }): JSX.Element => {
   const router = useRouter();
-  //const { authenticated } = useAuth();
-
+  const user = useUser();
   const isHome = router.pathname === '/';
 
   return (
@@ -28,20 +28,23 @@ export const Nav: FunctionComponent<IProps> = ({ navItems }): JSX.Element => {
             </div>
           </div>
         </Link>
-        <div className="py-pageMargin text-lg italic">
+        {/*   <div className="py-pageMargin text-lg italic">
           <div className=" pr-3">Berlin</div>
-        </div>
-        <div className="flex justify-between">
+        </div> */}
+        <div className="flex justify-between gap-x-2">
           {navItems.map(
-            (item) => (
-              /*               (!item.authRequired || (authenticated && item.authRequired)) && (
-               */ <Link key={item.href} href={item.href} className="flex items-center">
-                <div className="text-highlight-light color-black flex items-center px-1 text-xl transition hover:scale-[0.98]">
-                  <item.icon size={28} />
-                </div>
-              </Link>
-            )
-            /* ) */
+            (item) =>
+              (!item.authRequired || (!!user && item.authRequired)) && (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="box-content flex h-logoHeight items-center py-pageMargin "
+                >
+                  <div className="text-highlight-light color-black  flex items-center px-1 text-xl transition hover:scale-[0.98]">
+                    <item.icon size={24} />
+                  </div>
+                </Link>
+              )
           )}
         </div>
       </div>

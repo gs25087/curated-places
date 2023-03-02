@@ -17,13 +17,13 @@ const HomePage: NextPage = ({ postData, tagData }) => {
   //if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div>
+    <>
       <Head>
         <title>Curated Places</title>
         <meta name="description" content="Hand picked places" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="relative">
+      <div className="relative">
         {tagData && tagData.length > 0 && <TagBar tags={tagData} />}
         {postData.map((post: any) => {
           if (state && state?.tag)
@@ -35,8 +35,8 @@ const HomePage: NextPage = ({ postData, tagData }) => {
 
           return <PostCard key={post.id} post={post} tags={post.tags} />;
         })}
-      </main>
-    </div>
+      </div>
+    </>
   );
 };
 

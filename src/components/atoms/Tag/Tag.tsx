@@ -46,11 +46,10 @@ export const Tag = ({ shadow, icon, size, id, filter }: IProps): JSX.Element => 
 
   return (
     <div
-      className={`py-0.25 mr-0.5 flex items-center  gap-x-1 overflow-hidden whitespace-nowrap rounded-full border border-black  px-2.5 transition-colors last:mr-0
+      className={`py-0.25 mr-0.5 flex items-center  gap-x-1 overflow-hidden whitespace-nowrap rounded-full border border-black  px-2.5 shadow-md transition-colors last:mr-0
 				${size ? padding[size] : padding['sm']}
 				text-${size ? size : 'sm'}  
 				${filter ? 'cursor-pointer' : ''} 
-				${shadow ? 'shadow-md' : ''} 
         ${state.tag === id ? 'bg-primary-LIGHT' : 'bg-white'} `}
       onClick={() => {
         if (filter) {
