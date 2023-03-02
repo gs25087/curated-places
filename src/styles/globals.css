@@ -30,3 +30,19 @@ html {
 input:-internal-autofill-selected {
   @apply bg-white !important;
 }
+
+/* Auth style adjustments
+ */
+.auth-wrapper > * {
+  @apply w-full;
+}
+
+/* Combobox style adjustments
+ */
+[data-reach-combobox-popover] {
+  @apply z-50  rounded-lg border-transparent !important;
+}
+
+[data-suggested-value] {
+  @apply font-normal !important;
+}

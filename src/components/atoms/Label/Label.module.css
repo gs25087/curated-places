@@ -1,3 +1,3 @@
 .label {
-  @apply block text-xs text-black;
+  @apply block px-1.5 pb-0.5  text-xs text-black !important;
 }

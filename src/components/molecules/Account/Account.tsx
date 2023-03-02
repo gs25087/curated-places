@@ -4,10 +4,9 @@ import { useState, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { FormTitle, Label } from '@/components/atoms';
 import { Avatar } from '@/components/atoms';
 import { Button } from '@/components/atoms';
-import { Input, InputWrapper } from '@/components/atoms';
+import { Input } from '@/components/atoms';
 
 export type IFormData = {
   username: string | '';
@@ -24,7 +23,7 @@ export const Account = (/* { session } */) => {
 
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
-  const [avatar_url, setAvatarUrl] = useState(null);
+  const [avatarFilename, setAvatarFilename] = useState(null);
 
   const schema = yup.object().shape({
     username: yup.string().required('Username is required'),
@@ -57,6 +56,7 @@ export const Account = (/* { session } */) => {
 
       if (data) {
         reset(data);
+        setAvatarFilename(data.avatar_url);
         setSuccessMessage('');
         setErrorMessage('');
       }
@@ -98,14 +98,14 @@ export const Account = (/* { session } */) => {
     }
   }
 
-  async function updatePhoto(avatar_url: string) {
+  async function updatePhoto(avatarFile: string) {
     if (user) {
       try {
         setLoading(true);
 
         const updates = {
           id: user.id,
-          avatar_url,
+          avatar_url: avatarFile,
           updated_at: new Date().toISOString()
         };
 
@@ -133,29 +133,32 @@ export const Account = (/* { session } */) => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormTitle title={'User Profile'} />
-        <div className="flex flex-wrap items-center gap-x-8">
+        <div className="flex flex-wrap items-center justify-around gap-x-8">
           <div className="md:order order-2 w-full md:w-auto md:grow">
             <Input
-              /* label="First Name" */ name="first_name"
+              label="First Name"
+              name="first_name"
               register={register}
               errors={errors.first_name}
               placeholder={'First Name'}
             />
             <Input
-              /*  label="Last Name" */ name="last_name"
+              label="Last Name"
+              name="last_name"
               register={register}
               errors={errors.last_name}
               placeholder={'Last Name'}
             />
             <Input
-              /* label="Username"  */ name="username"
+              label="Username"
+              name="username"
               register={register}
               errors={errors.username}
               placeholder={'Username'}
             />
             <Input
-              /* label="Instagram"  */ name="website"
+              label="Instagram"
+              name="website"
               register={register}
               errors={errors.website}
               placeholder={'@username'}
@@ -164,26 +167,32 @@ export const Account = (/* { session } */) => {
           <div className="order md:order-2">
             <Avatar
               uid={user?.id}
-              url={avatar_url}
-              size={'7rem'}
-              onUpload={(url: string) => {
+              url={avatarFilename}
+              size={'100'}
+              onUpload={(avatarFilename: string) => {
                 //@ts-ignore
-                setAvatarUrl(url);
+                setAvatarFilename(avatarFilename);
                 //@ts-ignore
-                updatePhoto({ avatar_url: url });
+                updatePhoto(avatarFilename);
               }}
             />
           </div>
         </div>
 
-        <div className="mt-8 flex flex-wrap  gap-x-4 py-4">
+        <div className=" flex flex-wrap  justify-around gap-x-4 py-8">
           {errorMessage && <p className="mb-4  w-full text-sm text-red-500">{errorMessage}</p>}
           <Button
             label={loading ? 'Loading ...' : 'Update'}
             /* disabled={loading} */
+            color="white"
             type={'submit'}
           />
-          <Button label="Sign Out" onClick={() => supabase.auth.signOut()} type={'button'} />
+          <Button
+            color="white"
+            label="Sign Out"
+            onClick={() => supabase.auth.signOut()}
+            type={'button'}
+          />
         </div>
       </form>
     </>

@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import {
   Combobox,
   ComboboxInput,
@@ -12,11 +14,18 @@ import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocom
 import '@reach/combobox/styles.css';
 
 import styles from '@/styles/atoms/Input/Input.module.css';
+import './SearchBox.module.css';
 
+import { Input } from '@/components/atoms';
 import { PlacePhotos } from '@/components/molecules';
 
 interface ISearchBoxProps {
-  onSelectAddress: (address: string, latitude: number | null, longitude: number | null) => void;
+  onSelectAddress: (
+    name: string,
+    address: string,
+    latitude: number | null,
+    longitude: number | null
+  ) => void;
   defaultValue: string;
   address?: string;
 }
@@ -35,11 +44,15 @@ export const SearchBox = ({ onSelectAddress, defaultValue, address }: ISearchBox
   if (!isLoaded) return null;
   if (loadError) return <div>Error loading</div>;
 
+  const handlePlaceDetails = (name: string, url: string[]) => {
+    setPhotoUrls(url);
+  };
+
   return (
     <ReadySearchBox
       onSelectAddress={onSelectAddress}
       defaultValue={defaultValue}
-      onFetchPlaceDetails={setPhotoUrls}
+      onFetchPlaceDetails={handlePlaceDetails}
     >
       {/* Render place photos if available for the selected address, or a message to add photos if no photos are available */}
       {address && photoUrls.length ? (
@@ -62,7 +75,7 @@ const ReadySearchBox = ({
   children
 }: React.PropsWithChildren<
   ISearchBoxProps & {
-    onFetchPlaceDetails: (url: string[]) => void;
+    onFetchPlaceDetails: (name: string, url: string[]) => void;
   }
 >) => {
   const {
@@ -75,8 +88,8 @@ const ReadySearchBox = ({
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
     if (e.target.value === '') {
-      onSelectAddress('', null, null);
-      onFetchPlaceDetails([]);
+      onSelectAddress('', '', null, null);
+      onFetchPlaceDetails('', []);
     }
   };
 
@@ -87,42 +100,41 @@ const ReadySearchBox = ({
     try {
       const results = await getGeocode({ address });
       const { lat, lng } = await getLatLng(results[0]);
-      onSelectAddress(address, lat, lng);
+      onSelectAddress(' ', address, lat, lng);
 
       const placeId = results[0].place_id;
-      const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? '';
-      const cors =
-        process.env.NODE_ENV === 'development' ? 'https://cors-anywhere.herokuapp.com/' : '';
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY ?? '';
+      const cors = process.env.NODE_ENV === 'development' ? '' : ''; //
 
-      if (process.env.NODE_ENV === 'development') {
-        onFetchPlaceDetails(['/pic1.jpg', '/pic2.jpg', '/pic3.jpg']);
-      } else {
-        const url = `${cors}https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=photos&key=${apiKey}`;
+      const fields = 'photos,name';
 
-        axios
-          .get(url, {
-            headers: { 'Access-Control-Allow-Origin': '*' }
-          })
-          .then((response) => {
-            const data = response.data;
-            if (data.result && data.result.photos && data.result.photos.length > 0) {
-              const numberOfPhotos = data.result.photos.length;
-              const photoArr =
-                numberOfPhotos >= 3 ? data.result.photos.slice(0, 3) : data.result.photos;
-              // create an array of photo urls
-              const photoUrls = photoArr.map((photo: { photo_reference: string }) => {
-                return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photo.photo_reference}&key=${apiKey}`;
-              });
-              onFetchPlaceDetails(photoUrls);
-            } else {
-              onFetchPlaceDetails([]);
-            }
-          })
-          .catch((error) => {
-            console.error(`Error fetching place details: ${error}`);
-          });
-      }
+      axios
+        .post('/api/place/', {
+          headers: { 'Access-Control-Allow-Origin': '*' },
+          placeId,
+          fields
+        })
+        .then((response) => {
+          const data = response.data;
+          if (data.result && data.result.photos && data.result.photos.length > 0) {
+            const numberOfPhotos = data.result.photos.length;
+            const photoArr =
+              numberOfPhotos >= 3 ? data.result.photos.slice(0, 3) : data.result.photos;
+            // create an array of photo urls
+            const photoUrls = photoArr.map((photo: { photo_reference: string }) => {
+              return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photo.photo_reference}&key=${apiKey}`;
+            });
+            onFetchPlaceDetails(name, photoUrls);
+          } else {
+            onFetchPlaceDetails('', []);
+          }
+        })
+        .catch((error) => {
+          //@ts-ignore
+          console.error(`Error fetching place details: ${error}`);
+        });
     } catch (error) {
+      //@ts-ignore
       console.error(`Error geocoding address: ${error}`);
     }
   };

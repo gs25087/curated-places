@@ -1,4 +1,5 @@
-// import { useAuth } from '@/auth/useAuth';
+// @ts-nocheck
+
 import { useUser } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -19,7 +20,7 @@ export const Nav: FunctionComponent<IProps> = ({ navItems }): JSX.Element => {
   const isHome = router.pathname === '/';
 
   return (
-    <nav className="bg-secondary-light dark:bg-secondary-dark fixed top-0 left-1/2 z-nav mx-auto flex w-full -translate-x-1/2 transform flex-wrap items-center justify-between  md:max-w-md">
+    <nav className="bg-secondary-light dark:bg-secondary-dark fixed top-0 left-1/2 z-nav mx-auto flex w-full -translate-x-1/2 transform flex-wrap items-center justify-between  bg-white md:max-w-md">
       <div className="flex h-navHeight w-full justify-between px-pageMargin">
         <Link href={'/'}>
           <div className="text-highlight-light color-black flex items-center py-pageMargin pr-3 text-xl transition hover:scale-[0.98]">
@@ -40,8 +41,8 @@ export const Nav: FunctionComponent<IProps> = ({ navItems }): JSX.Element => {
                   href={item.href}
                   className="box-content flex h-logoHeight items-center py-pageMargin "
                 >
-                  <div className="text-highlight-light color-black  flex items-center px-1 text-xl transition hover:scale-[0.98]">
-                    <item.icon size={24} />
+                  <div className="text-highlight-light flex  items-center px-1 text-xl text-black transition hover:scale-[0.98]">
+                    <item.icon size={30} weight="light" />
                   </div>
                 </Link>
               )

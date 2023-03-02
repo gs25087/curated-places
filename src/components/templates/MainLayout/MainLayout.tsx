@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 
@@ -12,6 +14,8 @@ interface Props {
 export const MainLayout = ({ children }: Props) => {
   const router = useRouter();
   const isHome = router.pathname === '/';
+  const isAddPost = router.pathname === '/posts/add';
+  const isRegister = router.pathname === '/register';
 
   return (
     <div className="relative mx-auto max-w-full md:max-w-md">
@@ -19,7 +23,13 @@ export const MainLayout = ({ children }: Props) => {
         <Nav navItems={navItems} />
       </header>
       <main
-        className={` h-main ${isHome ? 'mt-homeNavHeight' : 'mt-notHomeNavHeight p-pageMargin'} `}
+        className={`  
+        ${
+          isHome
+            ? 'mt-homeNavHeight h-main'
+            : 'mt-notHomeNavHeight h-notHomeMain px-pageMarginL py-pageMarginM'
+        } 
+        ${isAddPost || isRegister ? 'bg-primary' : ''} `}
       >
         {children}
       </main>

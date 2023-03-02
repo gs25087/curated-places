@@ -1,5 +1,5 @@
 .input {
-  @apply block w-full appearance-none  border-b  py-2  leading-6 placeholder:text-gray-400 focus:outline-none;
+  @apply block w-full appearance-none rounded-lg border-transparent bg-primary-75 p-2 leading-6 placeholder:text-gray-400 focus:outline-none !important;
 }
 
 .fieldWrapper {

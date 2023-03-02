@@ -13,6 +13,7 @@ interface IFormData {
   latitude: number | null;
   longitude: number | null;
   address: string;
+  name: string;
 }
 
 interface IPost {
@@ -109,10 +110,11 @@ export const PostForm = ({ post }: IProps) => {
         {/*          <Label label="Search address" name="search" />
          */}{' '}
         <SearchBox
-          onSelectAddress={(address, latitude, longitude) => {
+          onSelectAddress={(name, address, latitude, longitude) => {
             setValue('address', address);
             setValue('latitude', latitude);
             setValue('longitude', longitude);
+            setValue('name', name);
           }}
           address={address}
           defaultValue=""
@@ -131,7 +133,7 @@ export const PostForm = ({ post }: IProps) => {
           </div>
         </>
       )}
-      <Button label="Save" type={'submit'} /* disabled={submitting} */ />
+      <Button label="Save" type={'submit'} /* disabled={submitting} */ classes="my-8" />
     </form>
   );
 };

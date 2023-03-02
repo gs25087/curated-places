@@ -11,15 +11,18 @@ export const Avatar = ({ uid, url, size, onUpload }) => {
 
   useEffect(() => {
     if (url) downloadImage(url);
+    console.log('Avatar filename exists: ', url);
   }, [url]);
 
-  async function downloadImage(path) {
+  async function downloadImage(filename) {
     try {
-      const { data, error } = await supabase.storage.from('avatars').download(path);
+      const { data, error } = await supabase.storage.from('avatars').getPublicUrl(filename);
       if (error) {
         throw error;
       }
-      const url = URL.createObjectURL(data);
+
+      const url = data.publicUrl;
+
       setAvatarUrl(url);
     } catch (error) {
       //@ts-nocheck
@@ -71,7 +74,7 @@ export const Avatar = ({ uid, url, size, onUpload }) => {
         />
       ) : (
         <div
-          className="h-[6rem]  w-[6rem] cursor-pointer rounded-full border border-dashed border-black bg-primary"
+          className="h-[6rem]  w-[6rem] cursor-pointer rounded-full border border-dashed border-black bg-primary-75"
           style={{ height: size, width: size }}
           onClick={() => document.getElementById('single').click()}
         />
