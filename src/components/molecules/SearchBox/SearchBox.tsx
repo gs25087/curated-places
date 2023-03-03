@@ -108,6 +108,8 @@ const ReadySearchBox = ({
           fields
         })
         .then((response) => {
+          //@ts-ignore
+          console.log(response);
           const data = response.data;
           if (data.result && data.result.photos && data.result.photos.length > 0) {
             const numberOfPhotos = data.result.photos.length;
