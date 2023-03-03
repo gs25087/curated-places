@@ -61,11 +61,12 @@ export const Avatar: FC<IAvatarProps> = ({ uid, avatarFilename, size, onUpload }
       {avatarUrl ? (
         <Image
           src={avatarUrl}
+          priority
           alt="Avatar"
           className="block h-[6rem] w-[6rem] rounded-full object-cover shadow-lg"
           height={size}
           width={size}
-          style={{ height: size, width: size }}
+          //style={{ height: size, width: size }}
           onClick={() => document.getElementById('single')?.click()}
         />
       ) : (
