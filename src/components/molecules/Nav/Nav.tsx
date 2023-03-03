@@ -1,9 +1,8 @@
-// @ts-nocheck
-
 import { useUser } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FunctionComponent } from 'react';
+import { NavItem } from 'src/types/types';
 
 interface IProps {
   navItems: {
@@ -25,7 +24,7 @@ export const Nav: FunctionComponent<IProps> = ({ navItems }): JSX.Element => {
         <Link href={'/'}>
           <div className="text-highlight-light color-black flex items-center py-pageMargin pr-3 text-xl transition hover:scale-[0.98]">
             <div className="rounded-full bg-primary px-3 py-0.5 font-bold shadow-md">
-              CU💎Ra💫T💕d
+              Ar💎chi💫v💕e
             </div>
           </div>
         </Link>
@@ -34,7 +33,7 @@ export const Nav: FunctionComponent<IProps> = ({ navItems }): JSX.Element => {
         </div> */}
         <div className="flex justify-between gap-x-2">
           {navItems.map(
-            (item) =>
+            (item: NavItem) =>
               (!item.authRequired || (!!user && item.authRequired)) && (
                 <Link
                   key={item.href}

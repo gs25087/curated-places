@@ -1,5 +1,3 @@
-//@ts-nocheck
-
 import {
   Combobox,
   ComboboxInput,
@@ -8,7 +6,7 @@ import {
   ComboboxOption
 } from '@reach/combobox';
 import axios from 'axios';
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useGoogleMapsScript, Libraries } from 'use-google-maps-script';
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete';
 import '@reach/combobox/styles.css';
@@ -16,7 +14,6 @@ import '@reach/combobox/styles.css';
 import styles from '@/styles/atoms/Input/Input.module.css';
 import './SearchBox.module.css';
 
-import { Input } from '@/components/atoms';
 import { PlacePhotos } from '@/components/molecules';
 
 interface ISearchBoxProps {
@@ -44,7 +41,7 @@ export const SearchBox = ({ onSelectAddress, defaultValue, address }: ISearchBox
   if (!isLoaded) return null;
   if (loadError) return <div>Error loading</div>;
 
-  const handlePlaceDetails = (name: string, url: string[]) => {
+  const handlePlacePhotos = (url: string[]) => {
     setPhotoUrls(url);
   };
 
@@ -52,7 +49,7 @@ export const SearchBox = ({ onSelectAddress, defaultValue, address }: ISearchBox
     <ReadySearchBox
       onSelectAddress={onSelectAddress}
       defaultValue={defaultValue}
-      onFetchPlaceDetails={handlePlaceDetails}
+      onFetchPlacePhotos={handlePlacePhotos}
     >
       {/* Render place photos if available for the selected address, or a message to add photos if no photos are available */}
       {address && photoUrls.length ? (
@@ -71,11 +68,11 @@ export const SearchBox = ({ onSelectAddress, defaultValue, address }: ISearchBox
 const ReadySearchBox = ({
   onSelectAddress,
   defaultValue,
-  onFetchPlaceDetails,
+  onFetchPlacePhotos,
   children
 }: React.PropsWithChildren<
   ISearchBoxProps & {
-    onFetchPlaceDetails: (name: string, url: string[]) => void;
+    onFetchPlacePhotos: (url: string[]) => void;
   }
 >) => {
   const {
@@ -89,7 +86,7 @@ const ReadySearchBox = ({
     setValue(e.target.value);
     if (e.target.value === '') {
       onSelectAddress('', '', null, null);
-      onFetchPlaceDetails('', []);
+      onFetchPlacePhotos([]);
     }
   };
 
@@ -99,13 +96,10 @@ const ReadySearchBox = ({
 
     try {
       const results = await getGeocode({ address });
-      const { lat, lng } = await getLatLng(results[0]);
-      onSelectAddress(' ', address, lat, lng);
+      const { lat, lng } = getLatLng(results[0]);
 
       const placeId = results[0].place_id;
       const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY ?? '';
-      const cors = process.env.NODE_ENV === 'development' ? '' : ''; //
-
       const fields = 'photos,name';
 
       axios
@@ -124,10 +118,11 @@ const ReadySearchBox = ({
             const photoUrls = photoArr.map((photo: { photo_reference: string }) => {
               return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photo.photo_reference}&key=${apiKey}`;
             });
-            onFetchPlaceDetails(name, photoUrls);
+            onFetchPlacePhotos(photoUrls);
           } else {
-            onFetchPlaceDetails('', []);
+            onFetchPlacePhotos([]);
           }
+          onSelectAddress(data.result?.name, address, lat, lng);
         })
         .catch((error) => {
           //@ts-ignore
@@ -141,25 +136,23 @@ const ReadySearchBox = ({
 
   return (
     <>
-      <div className={styles.fieldWrapper}>
-        <Combobox onSelect={handleSelect}>
-          <ComboboxInput
-            onChange={handleChange}
-            disabled={!ready}
-            placeholder="Search your location"
-            autoComplete="off"
-            className={styles.input}
-          />
-          <ComboboxPopover>
-            <ComboboxList>
-              {status === 'OK' &&
-                data.map(({ place_id, description }) => (
-                  <ComboboxOption key={place_id} value={description} />
-                ))}
-            </ComboboxList>
-          </ComboboxPopover>
-        </Combobox>
-      </div>
+      <Combobox onSelect={handleSelect}>
+        <ComboboxInput
+          onChange={handleChange}
+          disabled={!ready}
+          placeholder="Search your location"
+          autoComplete="off"
+          className={styles.input}
+        />
+        <ComboboxPopover>
+          <ComboboxList>
+            {status === 'OK' &&
+              data.map(({ place_id, description }) => (
+                <ComboboxOption key={place_id} value={description} />
+              ))}
+          </ComboboxList>
+        </ComboboxPopover>
+      </Combobox>
       {children}
     </>
   );

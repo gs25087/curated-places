@@ -26,9 +26,9 @@ export const MainLayout = ({ children }: Props) => {
         className={`  
         ${
           isHome
-            ? 'mt-homeNavHeight h-main'
-            : 'mt-notHomeNavHeight h-notHomeMain px-pageMarginL py-pageMarginM'
-        } 
+            ? 'mt-homeNavHeight min-h-[theme(spacing.main)]' //h-main
+            : 'mt-notHomeNavHeight min-h-[theme(spacing.notHomeMain)] px-pageMarginL py-pageMarginM'
+        }  
         ${isAddPost || isRegister ? 'bg-primary' : ''} `}
       >
         {children}

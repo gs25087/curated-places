@@ -2,27 +2,22 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useState, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { IFormStatusMessage, IProfileFormData } from 'src/types/types';
 import * as yup from 'yup';
 
 import { Avatar } from '@/components/atoms';
 import { Button } from '@/components/atoms';
 import { Input } from '@/components/atoms';
-
-export type IFormData = {
-  username: string | '';
-  first_name: string | '';
-  last_name: string | ' ';
-  website: string | ' ';
-  submit: undefined;
-};
+import { FormStatusMessage } from '@/components/atoms';
 
 export const Account = (/* { session } */) => {
   const supabase = useSupabaseClient();
   const user = useUser();
   const [loading, setLoading] = useState(true);
-
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [successMessage, setSuccessMessage] = useState<string>('');
+  const [statusMessage, setStatusMessage] = useState<IFormStatusMessage>({
+    status: '',
+    message: ''
+  });
   const [avatarFilename, setAvatarFilename] = useState(null);
 
   const schema = yup.object().shape({
@@ -31,7 +26,7 @@ export const Account = (/* { session } */) => {
     last_name: yup.string().required('Last name is required')
   });
 
-  const { register, handleSubmit, formState, reset } = useForm<IFormData>({
+  const { register, handleSubmit, formState, reset } = useForm<IProfileFormData>({
     resolver: yupResolver(schema)
   });
 
@@ -57,18 +52,22 @@ export const Account = (/* { session } */) => {
       if (data) {
         reset(data);
         setAvatarFilename(data.avatar_url);
-        setSuccessMessage('');
-        setErrorMessage('');
+        setStatusMessage({
+          status: '',
+          message: ''
+        });
       }
     } catch (error: unknown) {
-      // @ts-ignore
-      console.log(error.message);
+      setStatusMessage({
+        status: 'error',
+        message: 'Error loading the data!'
+      });
     } finally {
       setLoading(false);
     }
   }
 
-  async function updateProfile(data: IFormData) {
+  async function updateProfile(data: IProfileFormData) {
     try {
       setLoading(true);
 
@@ -81,17 +80,25 @@ export const Account = (/* { session } */) => {
       const { error } = await supabase.from('profiles').upsert(updates);
       if (error) throw error;
 
-      //@ts-ignore
-      setErrorMessage('');
+      setStatusMessage({
+        status: '',
+        message: ''
+      });
 
       reset(data);
     } catch (error: unknown) {
-      setErrorMessage('Error updating the data!');
+      setStatusMessage({
+        status: 'error',
+        message: 'Error loading the data!'
+      });
 
       //@ts-ignore
       if (error.code === '23505') {
         //@ts-ignore
-        setErrorMessage('Username already taken');
+        setStatusMessage({
+          status: 'error',
+          message: 'Username already exists!'
+        });
       }
     } finally {
       setLoading(false);
@@ -112,19 +119,16 @@ export const Account = (/* { session } */) => {
         const { error } = await supabase.from('profiles').upsert(updates);
         if (error) throw error;
         //@ts-nocheck
-        setSuccessMessage('Profile updated!');
-        setErrorMessage('');
+        setStatusMessage({ status: 'success', message: 'Your profile has been updated!' });
       } catch (error) {
-        //@ts-nocheck
-        setSuccessMessage('');
-        setErrorMessage('Error updating the data!');
+        setStatusMessage({ status: 'error', message: 'Error updating the data!' });
       } finally {
         setLoading(false);
       }
     }
   }
 
-  const onSubmit: SubmitHandler<IFormData> = async (data) => {
+  const onSubmit: SubmitHandler<IProfileFormData> = async (data) => {
     if (user) {
       updateProfile(data);
     }
@@ -134,7 +138,18 @@ export const Account = (/* { session } */) => {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-wrap items-center justify-around gap-x-8">
-          <div className="md:order order-2 w-full md:w-auto md:grow">
+          <Avatar
+            uid={user?.id}
+            avatarFilename={avatarFilename}
+            size={100}
+            onUpload={(avatarFilename: string) => {
+              //@ts-ignore
+              setAvatarFilename(avatarFilename);
+              //@ts-ignore
+              updatePhoto(avatarFilename);
+            }}
+          />
+          <div className="w-full">
             <Input
               label="First Name"
               name="first_name"
@@ -164,23 +179,12 @@ export const Account = (/* { session } */) => {
               placeholder={'@username'}
             />
           </div>
-          <div className="order md:order-2">
-            <Avatar
-              uid={user?.id}
-              url={avatarFilename}
-              size={'100'}
-              onUpload={(avatarFilename: string) => {
-                //@ts-ignore
-                setAvatarFilename(avatarFilename);
-                //@ts-ignore
-                updatePhoto(avatarFilename);
-              }}
-            />
-          </div>
         </div>
 
         <div className=" flex flex-wrap  justify-around gap-x-4 py-8">
-          {errorMessage && <p className="mb-4  w-full text-sm text-red-500">{errorMessage}</p>}
+          {statusMessage.message && (
+            <FormStatusMessage message={statusMessage.message} status={statusMessage.status} />
+          )}
           <Button
             label={loading ? 'Loading ...' : 'Update'}
             /* disabled={loading} */

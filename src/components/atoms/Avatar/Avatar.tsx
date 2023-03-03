@@ -1,36 +1,32 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 
-import { Label } from '@/components/atoms';
+import { Label } from '../Label';
 
-export const Avatar = ({ uid, url, size, onUpload }) => {
+interface IAvatarProps {
+  uid: string | undefined;
+  avatarFilename: string | null;
+  size: number;
+  onUpload: (filePath: string) => void;
+}
+
+export const Avatar: FC<IAvatarProps> = ({ uid, avatarFilename, size, onUpload }) => {
   const supabase = useSupabaseClient();
-  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState<null | string>(null);
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
-    if (url) downloadImage(url);
-    console.log('Avatar filename exists: ', url);
-  }, [url]);
+    if (avatarFilename) downloadImage(avatarFilename);
+  }, [avatarFilename]);
 
-  async function downloadImage(filename) {
-    try {
-      const { data, error } = await supabase.storage.from('avatars').getPublicUrl(filename);
-      if (error) {
-        throw error;
-      }
-
-      const url = data.publicUrl;
-
-      setAvatarUrl(url);
-    } catch (error) {
-      //@ts-nocheck
-      console.log('Error downloading image: ', error);
-    }
+  async function downloadImage(filename: string) {
+    const { data } = supabase.storage.from('avatars').getPublicUrl(filename);
+    const url = data.publicUrl;
+    setAvatarUrl(url);
   }
 
-  const uploadAvatar = async (event) => {
+  const uploadAvatar = async (event: ChangeEvent<HTMLInputElement>) => {
     try {
       setUploading(true);
 
@@ -43,7 +39,7 @@ export const Avatar = ({ uid, url, size, onUpload }) => {
       const fileName = `${uid}.${fileExt}`;
       const filePath = `${fileName}`;
 
-      let { error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(filePath, file, { upsert: true });
 
@@ -61,30 +57,27 @@ export const Avatar = ({ uid, url, size, onUpload }) => {
   };
 
   return (
-    <div className=" ">
+    <div>
       {avatarUrl ? (
         <Image
           src={avatarUrl}
           alt="Avatar"
           className="block h-[6rem] w-[6rem] rounded-full object-cover shadow-lg"
+          priority
           height={size}
           width={size}
           style={{ height: size, width: size }}
-          onClick={() => document.getElementById('single').click()}
+          onClick={() => document.getElementById('single')?.click()}
         />
       ) : (
         <div
           className="h-[6rem]  w-[6rem] cursor-pointer rounded-full border border-dashed border-black bg-primary-75"
           style={{ height: size, width: size }}
-          onClick={() => document.getElementById('single').click()}
+          onClick={() => document.getElementById('single')?.click()}
         />
       )}
       <div style={{ width: size }} className="pt-4 text-center">
-        <Label
-          className="w-full text-sm "
-          name="single"
-          label={uploading ? 'Uploading ...' : 'Edit picture'}
-        />
+        <Label name="single" label={uploading ? 'Uploading ...' : 'Edit picture'} />
         <input
           className="absolute hidden w-0"
           type="file"

@@ -1,51 +1,39 @@
 import { FieldError, UseFormRegister } from 'react-hook-form';
-import { IAddPostFormData, IProfileFormData } from 'src/types/types';
+import { IAddPostFormData } from 'src/types/types';
 
 import styles from '@/styles/atoms/Input/Input.module.css';
 
 import { Label } from '@/components/atoms';
 
-type InputFieldType =
-  | 'text'
-  | 'number'
-  | 'checkbox'
-  | 'radio'
-  | 'password'
-  | 'submit'
-  | 'file'
-  | 'email'
-  | 'tel';
-
 interface FormField {
   name: string;
   label?: string;
-  register: UseFormRegister<IAddPostFormData> | UseFormRegister<IProfileFormData>;
+  register: UseFormRegister<IAddPostFormData>;
   errors?: FieldError;
   required?: boolean;
-  type?: InputFieldType;
   placeholder?: string;
   classes?: string[];
 }
 
-export const Input = ({
+export const Textarea = ({
   name,
   label,
   register,
   errors,
   required,
-  type,
   placeholder,
   classes
 }: FormField) => {
   return (
     <div className={`form-control-input  ${styles.fieldWrapper} ${classes?.join(' ')}`}>
       {label && <Label required={required} label={label} name={name} />}
-      <input
+      <textarea
         id={name}
-        type={type || 'text'}
         //@ts-ignore
         {...register(name)}
-        className={`leading-8 ${errors ? 'border-red-500' : 'border-black'} ${styles.input}`}
+        className={`text-xs leading-8 ${errors ? 'border-red-500' : 'border-black'} ${
+          styles.input
+        }`}
         placeholder={placeholder}
       />
 
