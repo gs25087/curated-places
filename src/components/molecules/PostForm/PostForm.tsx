@@ -14,10 +14,11 @@ import { SearchBox } from '@/components/molecules/SearchBox';
 const schema = yup.object().shape({
   title: yup.string().required('Title is required'),
   address: yup.string().required('Address is required'),
+  photos: yup.string(),
   latitude: yup.number().required('Latitude is required'),
   longitude: yup.number().required('Longitude is required'),
-  description: yup.string(),
-  tags: yup.array().min(1, 'At least one tag is required')
+  description: yup.string()
+  // tags: yup.array().min(1, 'At least one tag is required')
 });
 
 export const PostForm = () => {
@@ -30,18 +31,18 @@ export const PostForm = () => {
     message: ''
   });
 
-  const { handleSubmit, setValue, formState, watch, register, getValues } =
-    useForm<IAddPostFormData>({
-      resolver: yupResolver(schema),
-      defaultValues: {
-        title: '',
-        address: '',
-        latitude: 0,
-        longitude: 0,
-        description: '',
-        tags: []
-      }
-    });
+  const { handleSubmit, setValue, formState, watch, register } = useForm<IAddPostFormData>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      title: '',
+      address: '',
+      photos: '',
+      latitude: 0,
+      longitude: 0,
+      description: '',
+      tags: []
+    }
+  });
 
   const errors: FieldErrors<IAddPostFormData> = formState.errors;
   const address = watch('address');
@@ -70,6 +71,7 @@ export const PostForm = () => {
 
   //const handleUpdate = async (currentPost: IPost, data: IAddPostFormData) => {};
   const onSubmit: SubmitHandler<IAddPostFormData> = async (data) => {
+    console.log('data', data);
     // setSubmitting(false);
     if (user) {
       /*  if (post) {
@@ -92,6 +94,9 @@ export const PostForm = () => {
             setValue('latitude', latitude);
             setValue('longitude', longitude);
             setValue('title', title);
+          }}
+          setPhotos={(photos) => {
+            setValue('photos', JSON.stringify(photos));
           }}
           address={address}
           defaultValue=""

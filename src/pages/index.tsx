@@ -23,7 +23,7 @@ const HomePage: NextPage = ({ postData, tagData }) => {
         <meta name="description" content="Hand picked places" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="relative">
+      <div className="relative mb-32">
         {tagData && tagData.length > 0 && <TagBar tags={tagData} />}
         {postData.map((post: any) => {
           if (state && state?.tag)
@@ -81,11 +81,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   // Run queries with RLS on the server
-  const { data: postData } = await supabase.from('posts').select('*');
+  const { data } = await supabase.from('posts').select('*');
 
   return {
     props: {
-      postData: postData ?? [],
+      postData: data ?? [],
       tagData: tags
     }
   };

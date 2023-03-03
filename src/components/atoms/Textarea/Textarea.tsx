@@ -31,7 +31,7 @@ export const Textarea = ({
         id={name}
         //@ts-ignore
         {...register(name)}
-        className={`text-xs leading-8 ${errors ? 'border-red-500' : 'border-black'} ${
+        className={`text-xs leading-4 ${errors ? 'border-red-500' : 'border-black'} ${
           styles.input
         }`}
         placeholder={placeholder}

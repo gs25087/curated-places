@@ -1,5 +1,9 @@
 export interface IPost {
   id: string;
+  title: string;
+  address: string;
+  photos: string[];
+  description: string | null;
   latitude: number | null;
   longitude: number | null;
 }
@@ -12,6 +16,7 @@ export interface IFormStatusMessage {
 export interface IAddPostFormData {
   title: string;
   address: string;
+  photos: string;
   latitude: number | null;
   longitude: number | null;
   description: string;
@@ -30,4 +35,17 @@ export interface NavItem {
   icon: Reactnode;
   authRequired: boolean;
   href: string;
+}
+
+export interface IPostPhotosProps {
+  photoUrls: string[];
+}
+
+export interface IPostCardProps {
+  post: IPost;
+  tags: Tags[];
+}
+
+export interface ITags {
+  tags: number[];
 }

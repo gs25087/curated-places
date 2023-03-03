@@ -6,7 +6,6 @@ import { ReactElement, useEffect, useState } from 'react';
 import { TAGS_KEY } from '@/lib/tags';
 
 interface IProps {
-  shadow?: boolean;
   icon?: ReactElement;
   size?: string;
   filter?: boolean;
@@ -25,12 +24,13 @@ interface Tag {
 }
 
 const padding: Padding = {
+  xs: 'px-1.5 py-0.15',
   sm: 'px-2.5 py-0.25',
   md: 'px-3 py-0.5',
   lg: 'px-3.5 py-0.75'
 };
 
-export const Tag = ({ shadow, icon, size, id, filter }: IProps): JSX.Element => {
+export const Tag = ({ icon, size = 'sm', id, filter }: IProps): JSX.Element => {
   const { state, dispatch } = useMapContext();
   const [tagItem, setTagItem] = useState<Tag>();
   useEffect(() => {
@@ -48,7 +48,7 @@ export const Tag = ({ shadow, icon, size, id, filter }: IProps): JSX.Element => 
     <>
       {tagItem && tagItem?.label && (
         <div
-          className={`py-0.25 mr-0.5 flex items-center  gap-x-1 overflow-hidden whitespace-nowrap rounded-full border border-black  px-2.5 shadow-md transition-colors last:mr-0
+          className={`py-0.25 mr-0.5 flex items-center  gap-x-1 overflow-hidden whitespace-nowrap rounded-full border border-black  px-2.5 shadow transition-colors last:mr-0
 				${size ? padding[size] : padding['sm']}
 				text-${size ? size : 'sm'}  
 				${filter ? 'cursor-pointer' : ''} 
