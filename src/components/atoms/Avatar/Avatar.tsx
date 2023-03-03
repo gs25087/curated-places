@@ -63,7 +63,6 @@ export const Avatar: FC<IAvatarProps> = ({ uid, avatarFilename, size, onUpload }
           src={avatarUrl}
           alt="Avatar"
           className="block h-[6rem] w-[6rem] rounded-full object-cover shadow-lg"
-          priority
           height={size}
           width={size}
           style={{ height: size, width: size }}
