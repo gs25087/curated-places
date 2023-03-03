@@ -65,7 +65,7 @@
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "react-firebaseui": "^6.0.0",
-    "react-hook-form": "^7.43.2",
+    "react-hook-form": "^7.43.3",
     "react-icons": "^4.7.1",
     "react-swiper": "^0.1.5",
     "reflect-metadata": "^0.1.13",
