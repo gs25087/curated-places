@@ -12,7 +12,6 @@ import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocom
 import '@reach/combobox/styles.css';
 
 import styles from '@/styles/atoms/Input/Input.module.css';
-import './SearchBox.module.css';
 
 import { PlacePhotos } from '@/components/molecules';
 
