@@ -1,11 +1,10 @@
-import { AppWrapper, useMapContext } from '@/context/MapContext/MapContext';
+import { useMapContext } from '@/context/MapContext/MapContext';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import type { GetServerSideProps, NextApiRequest, NextApiResponse, NextPage } from 'next';
 import Head from 'next/head';
-import { ReactNode } from 'react';
 
 import { PostCard, TagBar } from '@/components/molecules/';
-import { MainLayout } from '@/components/templates/MainLayout';
+import { CityPopup } from '@/components/molecules/CityPopup';
 
 import { getTagsFromCookies, ITag, setTagsToCookies } from '@/lib/tags';
 
@@ -23,6 +22,7 @@ const HomePage: NextPage = ({ postData, tagData }) => {
         <meta name="description" content="Hand picked places" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {state?.openCityPopup && <CityPopup />}
       <div className="relative mb-32">
         {tagData && tagData.length > 0 && <TagBar tags={tagData} />}
         {postData.map((post: any) => {
@@ -40,12 +40,12 @@ const HomePage: NextPage = ({ postData, tagData }) => {
   );
 };
 
-//@ts-ignore
+/* //@ts-ignore
 HomePage.getLayout = (page: ReactNode) => (
   <AppWrapper>
     <MainLayout>{page}</MainLayout>
   </AppWrapper>
-);
+); */
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const req = ctx.req as NextApiRequest;

@@ -2,7 +2,7 @@ export interface IPost {
   id: string;
   title: string;
   address: string;
-  photos: string[];
+  photos: string;
   description: string | null;
   latitude: number | null;
   longitude: number | null;

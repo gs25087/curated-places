@@ -1,3 +1,4 @@
+import { AppWrapper } from '@/context/MapContext/MapContext';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { AppProps } from 'next/app';
@@ -15,7 +16,7 @@ export const MainProvider = ({ children, pageProps }: Props) => {
 
   return (
     <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
-      {children}
+      <AppWrapper>{children}</AppWrapper>
     </SessionContextProvider>
   );
 };
