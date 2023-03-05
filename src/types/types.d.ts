@@ -49,3 +49,8 @@ export interface IPostCardProps {
 export interface ITags {
   tags: number[];
 }
+
+export interface IMapContext {
+  tag: number | null;
+  openCityPopup: boolean;
+}

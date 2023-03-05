@@ -35,7 +35,12 @@ export const CityPopup = () => {
       <div className="grid grid-cols-2 rounded-2xl  text-center ">
         {city.map((city: string) => (
           <div key={city} className="p-2">
-            <div className="py-0.25 city mr-0.5 rounded-full border border-black bg-white  px-2.5 text-center shadow transition-colors last:mr-0">
+            <div
+              className="py-0.25 city mr-0.5 cursor-pointer rounded-full border border-black  bg-white px-2.5 text-center shadow transition-colors last:mr-0"
+              onClick={() => {
+                dispatch({ type: ACTIONS.OPEN_CITYPOPUP, payload: false });
+              }}
+            >
               {city}
             </div>
           </div>

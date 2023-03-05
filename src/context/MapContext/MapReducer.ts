@@ -1,4 +1,4 @@
-import { boolean } from 'yup';
+import { IMapContext } from 'src/types/types';
 
 interface IAction {
   type: string;
@@ -7,10 +7,10 @@ interface IAction {
 
 export const initialState = {
   tag: null,
-  openCityPopup: boolean
+  openCityPopup: false
 };
 
-export const MapReducer = (state: { tag: number }, action: IAction) => {
+export const MapReducer = (state: IMapContext, action: IAction) => {
   switch (action.type) {
     case ACTIONS.SET_TAG: {
       return {

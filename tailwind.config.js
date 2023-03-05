@@ -47,7 +47,7 @@ module.exports = {
         nav: '59'
       },
       fontSize: {
-        '2xs': '.5rem',
+        '2xs': '.65rem',
         xs: '.75rem',
         sm: '.875rem',
         base: '(var(--baseFontSize), 1rem)',
