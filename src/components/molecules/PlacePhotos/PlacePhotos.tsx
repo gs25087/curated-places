@@ -29,7 +29,7 @@ export const PlacePhotos: React.FC<IPostPhotosProps> = ({ photoUrls }) => {
               width={200}
               height={128}
               alt="Place photo"
-              className="h-[128px] w-auto rounded-lg object-contain"
+              className="aspect-auto h-[128px] w-auto rounded-lg object-contain"
             />
           </SwiperSlide>
         ))}

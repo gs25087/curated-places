@@ -37,7 +37,7 @@ export interface IUser {
   full_name: string | ' ';
   website: string | ' ';
   role: IRole['role'];
-  avatar_url: string | ' ';
+  avatar_filename: string | ' ';
 }
 
 export interface IAuthor {
@@ -51,10 +51,11 @@ export interface IUserPosts {
 }
 
 export type IProfileFormData = {
-  first_name: string | '';
+  id: string;
   username: string | '';
-  website: string | ' ';
+  first_name: string | '';
   last_name: string | ' ';
+  website: string | ' ';
   submit: undefined;
 };
 
@@ -80,4 +81,10 @@ export interface ITags {
 export interface IMapContext {
   tag: number | null;
   openCityPopup: boolean;
+}
+
+export interface IAvatarProps {
+  avatarFilePath: string | null;
+  size: number;
+  onUpload: (filePath: string, file: File) => void;
 }

@@ -40,7 +40,7 @@ export const PostCard = ({ post, tags }: IPostCardProps) => {
         </div>
 
         <div className="flex justify-between pt-1.5">
-          <h1 className="w-3/5 font-medium leading-3">{post.title}</h1>
+          <h1 className="mb-0.5 w-3/5 font-medium">{post.title}</h1>
           {tags && tags.length > 0 && (
             <div className="flex w-2/5 items-start justify-end ">
               {tags.map((tagId) => (

@@ -1,6 +1,7 @@
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { IUserPosts } from 'src/types/types';
 
 import { PostCard } from '@/components/molecules';
@@ -11,23 +12,35 @@ export default function UserPosts({ user, posts }: IUserPosts) {
   const session = useSession();
   const supabase = useSupabaseClient();
   const userIsOwner = session?.user?.id === user.id;
+  const [publicAvatarUrl, setPublicAvatarUrl] = useState<string>('');
 
-  const {
-    data: { publicUrl }
-  } = supabase.storage.from('avatars').getPublicUrl(user.avatar_url);
+  const getAvatarPublicUrl = async (filename: string) => {
+    const {
+      data: { publicUrl }
+    } = supabase.storage.from('avatars').getPublicUrl(filename);
+    setPublicAvatarUrl(publicUrl);
+  };
+
+  useEffect(() => {
+    if (user.avatar_filename) {
+      getAvatarPublicUrl(user.avatar_filename);
+    }
+  }, [user.avatar_filename]);
 
   return (
     <>
       <div className="mb-4 flex gap-x-4 px-pageMargin">
         <div>
-          <Image
-            src={publicUrl}
-            priority
-            alt="Avatar"
-            className="block h-[6rem] w-[6rem] rounded-full object-cover shadow-lg"
-            height={100}
-            width={100}
-          />
+          {publicAvatarUrl && (
+            <Image
+              src={publicAvatarUrl}
+              priority
+              alt="Avatar"
+              className="block h-[6rem] w-[6rem] rounded-full object-cover shadow-lg"
+              height={100}
+              width={100}
+            />
+          )}
         </div>
         {userIsOwner && (
           <div>

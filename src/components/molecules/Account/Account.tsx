@@ -18,12 +18,14 @@ export const Account = (/* { session } */) => {
     status: '',
     message: ''
   });
-  const [avatarFilename, setAvatarFilename] = useState(null);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string>('');
 
   const schema = yup.object().shape({
     username: yup.string().required('Username is required'),
     first_name: yup.string().required('First name is required'),
-    last_name: yup.string().required('Last name is required')
+    last_name: yup.string().required('Last name is required'),
+    website: yup.string().url('Website must be a valid URL')
   });
 
   const { register, handleSubmit, formState, reset } = useForm<IProfileFormData>({
@@ -35,6 +37,12 @@ export const Account = (/* { session } */) => {
   useEffect(() => {
     getProfile();
   }, [reset]);
+
+  async function getAvatarPublicUrl(filename: string) {
+    const { data } = supabase.storage.from('avatars').getPublicUrl(filename);
+    const url = data.publicUrl;
+    setAvatarUrl(url);
+  }
 
   async function getProfile() {
     try {
@@ -50,8 +58,17 @@ export const Account = (/* { session } */) => {
       }
 
       if (data) {
-        reset(data);
-        setAvatarFilename(data.avatar_url);
+        console.log('data', { data });
+        reset({
+          id: data.id,
+          first_name: data.first_name,
+          last_name: data.last_name,
+          username: data.username,
+          website: data.website
+        });
+        const fileName = data.avatar_filename ? data.avatar_filename : '';
+
+        fileName && getAvatarPublicUrl(fileName);
         setStatusMessage({
           status: '',
           message: ''
@@ -68,17 +85,23 @@ export const Account = (/* { session } */) => {
   }
 
   async function updateProfile(data: IProfileFormData) {
+    console.log('updateProfile', { data });
     try {
       setLoading(true);
 
       const updates = {
-        id: user?.id,
+        //id: user?.id,
         ...data,
         updated_at: new Date().toISOString()
       };
 
+      console.log('x', { updates });
       const { error } = await supabase.from('profiles').upsert(updates);
       if (error) throw error;
+
+      if (avatarFile) {
+        await updatePhoto(avatarFile);
+      }
 
       setStatusMessage({
         status: '',
@@ -105,20 +128,32 @@ export const Account = (/* { session } */) => {
     }
   }
 
-  async function updatePhoto(avatarFile: string) {
+  async function updatePhoto(avatarFile: File) {
     if (user) {
       try {
         setLoading(true);
 
+        const fileExt = avatarFile.name.split('.').pop();
+        const fileName = `${user.id}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(fileName, avatarFile, { upsert: true });
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
         const updates = {
           id: user.id,
-          avatar_url: avatarFile,
+          avatar_filename: fileName,
           updated_at: new Date().toISOString()
         };
 
         const { error } = await supabase.from('profiles').upsert(updates);
+
         if (error) throw error;
-        //@ts-nocheck
+
         setStatusMessage({ status: 'success', message: 'Your profile has been updated!' });
       } catch (error) {
         setStatusMessage({ status: 'error', message: 'Error updating the data!' });
@@ -139,14 +174,11 @@ export const Account = (/* { session } */) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-wrap items-center justify-around gap-x-8">
           <Avatar
-            uid={user?.id}
-            avatarFilename={avatarFilename}
+            avatarFilePath={avatarUrl}
             size={100}
-            onUpload={(avatarFilename: string) => {
-              //@ts-ignore
-              setAvatarFilename(avatarFilename);
-              //@ts-ignore
-              updatePhoto(avatarFilename);
+            onUpload={(blobUrl: string, file: File) => {
+              setAvatarFile(file);
+              setAvatarUrl(blobUrl);
             }}
           />
           <div className="w-full">
