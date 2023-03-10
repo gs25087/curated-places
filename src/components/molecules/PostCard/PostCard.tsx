@@ -1,6 +1,9 @@
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { BookmarkSimple } from 'phosphor-react';
-import React from 'react';
-import { IPostCardProps } from 'src/types/types';
+import React, { useEffect, useState } from 'react';
+import { IAuthor, IPostCardProps, IUser } from 'src/types/types';
 
 import { Tag } from '@/components/atoms/Tag';
 
@@ -8,10 +11,26 @@ import { PlacePhotos } from '../PlacePhotos';
 
 export const PostCard = ({ post, tags }: IPostCardProps) => {
   const photos = post.photos ? JSON.parse(post.photos) : null;
+  const supabase = useSupabaseClient();
+  const router = useRouter();
+  const isProfile = router.pathname.startsWith('/profile/');
+
+  const [author, setAuthor] = useState<string>('');
+
+  async function fetchAuthorName() {
+    const { data } = await supabase.from('profiles').select('*').eq('id', post.author).single();
+
+    const { first_name, last_name } = data as IAuthor;
+    setAuthor(`${first_name} ${last_name}`);
+  }
+
+  useEffect(() => {
+    fetchAuthorName();
+  }, []);
 
   return (
     <div key={post.id} className={`w-full border-b-4 last:border-b-0`}>
-      <div className=" p-4">
+      <div className=" p-pageMargin">
         <div className="w-full rounded-lg  object-cover py-0.5">
           {photos ? (
             <PlacePhotos photoUrls={photos} />
@@ -39,7 +58,7 @@ export const PostCard = ({ post, tags }: IPostCardProps) => {
             <div className="mb-2 hidden text-right text-gray-400">
               <BookmarkSimple size={20} weight="light" />
             </div>
-            Gintare Simutyte
+            {!isProfile && <Link href={`/profile/${post.author}`}>{author}</Link>}
           </div>
         </div>
       </div>

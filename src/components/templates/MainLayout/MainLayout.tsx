@@ -16,6 +16,7 @@ export const MainLayout = ({ children }: Props) => {
   const isHome = router.pathname === '/';
   const isAddPost = router.pathname === '/posts/add';
   const isRegister = router.pathname === '/register';
+  const isProfile = router.pathname.startsWith('/profile/');
 
   return (
     <div className="relative mx-auto max-w-full md:max-w-md">
@@ -25,7 +26,7 @@ export const MainLayout = ({ children }: Props) => {
       <main
         className={`  
         ${
-          isHome
+          isHome || isProfile
             ? 'mt-homeNavHeight min-h-[theme(spacing.main)]' //h-main
             : 'mt-notHomeNavHeight min-h-[theme(spacing.notHomeMain)] px-pageMarginL py-pageMarginM'
         }  

@@ -1,4 +1,5 @@
 export interface IPost {
+  author: string;
   id: string;
   title: string;
   address: string;
@@ -6,6 +7,7 @@ export interface IPost {
   description: string | null;
   latitude: number | null;
   longitude: number | null;
+  tags: number[];
 }
 
 export interface IFormStatusMessage {
@@ -23,11 +25,36 @@ export interface IAddPostFormData {
   tags: number[];
 }
 
-export type IProfileFormData = {
+export interface IRole {
+  role: 'viewer' | 'editor' | 'admin';
+}
+
+export interface IUser {
+  id: string;
   username: string | '';
   first_name: string | '';
   last_name: string | ' ';
+  full_name: string | ' ';
   website: string | ' ';
+  role: IRole['role'];
+  avatar_url: string | ' ';
+}
+
+export interface IAuthor {
+  first_name: string | '';
+  last_name: string | '';
+}
+
+export interface IUserPosts {
+  user: IUser;
+  posts: IPost[];
+}
+
+export type IProfileFormData = {
+  first_name: string | '';
+  username: string | '';
+  website: string | ' ';
+  last_name: string | ' ';
   submit: undefined;
 };
 

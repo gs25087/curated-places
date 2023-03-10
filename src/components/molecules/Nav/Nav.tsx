@@ -29,13 +29,15 @@ export const Nav: FunctionComponent<IProps> = ({ navItems }): JSX.Element => {
             </div>
           </div>
         </Link>
-        <div
-          className="mt-[2px] flex w-full justify-end  py-pageMargin"
-          onClick={() => {
-            dispatch({ type: ACTIONS.OPEN_CITYPOPUP, payload: true });
-          }}
-        >
-          <div className="mr-2.5  flex h-logoHeight items-center">Berlin</div>
+        <div className="mt-[2px] flex w-full justify-end  py-pageMargin">
+          <div
+            className="mr-2.5  flex h-logoHeight items-center"
+            onClick={() => {
+              dispatch({ type: ACTIONS.OPEN_CITYPOPUP, payload: true });
+            }}
+          >
+            Berlin
+          </div>
         </div>
 
         <div className="flex justify-between gap-x-2">
