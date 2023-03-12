@@ -9,8 +9,6 @@ interface Props {
   pageProps: AppProps['pageProps'];
 }
 
-// This is the place responsible for grouping all providers from the app
-
 export const MainProvider = ({ children, pageProps }: Props) => {
   const [supabase] = useState(() => createBrowserSupabaseClient());
 

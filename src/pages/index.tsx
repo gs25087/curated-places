@@ -11,7 +11,6 @@ import { LocalitiesPopup } from '@/components/molecules/LocalitiesPopup.tsx';
 const HomePage: NextPage = ({ postData }) => {
   // @ts-ignore
   const { state } = useMapContext();
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [state?.tag]);
@@ -23,7 +22,7 @@ const HomePage: NextPage = ({ postData }) => {
         <meta name="description" content="Hand picked places" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {state?.openLocalitiesPopup && state?.localities > 0 && <LocalitiesPopup />}
+      {state?.openLocalitiesPopup && state?.localities.length > 0 && <LocalitiesPopup />}
       <div className="relative mb-32">
         {state?.tags && state?.tags.length > 0 && <TagBar tags={state.tags} />}
         {postData.map((post: any) => {

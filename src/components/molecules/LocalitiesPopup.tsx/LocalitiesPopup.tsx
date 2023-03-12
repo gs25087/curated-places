@@ -28,7 +28,7 @@ export const LocalitiesPopup = () => {
             <div
               className="py-0.25 locality mr-0.5 cursor-pointer rounded-full border border-black  bg-white px-2.5 text-center shadow transition-colors last:mr-0"
               onClick={() => {
-                dispatch({ type: ACTIONS.OPEN_LOCALITIESPOPUP, payload: false });
+                dispatch({ type: ACTIONS.OPEN_LOCALITIESPOPUP, payload: true });
               }}
             >
               {locality}
