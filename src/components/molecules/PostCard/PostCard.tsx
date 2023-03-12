@@ -29,7 +29,7 @@ export const PostCard = ({ post, tags }: IPostCardProps) => {
   }, []);
 
   return (
-    <div key={post.id} className={`w-full border-b-4 last:border-b-0`}>
+    <div key={post.id} className={`w-full border-b-4 last:mb-32 last:border-b-0`}>
       <div className=" p-pageMargin">
         <div className="w-full rounded-lg  object-cover py-0.5">
           {photos ? (

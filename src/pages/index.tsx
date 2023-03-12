@@ -23,7 +23,7 @@ const HomePage: NextPage = ({ postData }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {state?.openLocalitiesPopup && state?.localities.length > 0 && <LocalitiesPopup />}
-      <div className="relative mb-32">
+      <div className="relative ">
         {state?.tags && state?.tags.length > 0 && <TagBar tags={state.tags} />}
         {postData.map((post: any) => {
           if (state && state?.tag)
