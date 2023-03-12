@@ -1,3 +1,5 @@
+import { ACTIONS } from '@/context/MapContext/MapReducer';
+
 export interface IPost {
   author: string;
   id: string;
@@ -60,6 +62,7 @@ export type IProfileFormData = {
 };
 
 export interface NavItem {
+  label: string;
   icon: Reactnode;
   authRequired: boolean;
   href: string;
@@ -78,10 +81,29 @@ export interface ITags {
   tags: number[];
 }
 
+export interface ITag {
+  id: number;
+  label: string;
+  created_at: string;
+  posts: number[];
+}
+
+export interface ILocality {
+  localities: string[];
+}
+
 export interface IMapContext {
   tag: number | null;
-  openCityPopup: boolean;
+  openLocalitiesPopup: boolean;
+  tags: ITags[];
+  localities: string[];
 }
+
+export type Action =
+  | { type: typeof ACTIONS.SET_TAG; payload: string }
+  | { type: typeof ACTIONS.OPEN_LOCALITIESPOPUP; payload: boolean }
+  | { type: typeof ACTIONS.SAVE_TAGS; payload: ITag[] }
+  | { type: typeof ACTIONS.SAVE_LOCALITIES; payload: string[] };
 
 export interface IAvatarProps {
   avatarFilePath: string | null;

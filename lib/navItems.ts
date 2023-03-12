@@ -1,7 +1,7 @@
-import { Plus, User } from 'phosphor-react';
+import { Plus, User, MapPin } from 'phosphor-react';
 
 export const navItems = [
-  /*   { href: '/', icon: IoMdHome, label: 'Home', authRequired: false },
-   */ { href: '/posts/add', icon: Plus, label: 'New post', authRequired: true },
-  { href: '/register/', icon: User, label: 'Profile', authRequired: true }
+  { href: '/', icon: MapPin, label: 'Location', authRequired: false },
+  { href: '/posts/add', icon: Plus, label: 'New post', authRequired: true },
+  { href: '/login/', icon: User, label: 'Login', authRequired: false }
 ];

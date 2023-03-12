@@ -1,5 +1,6 @@
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Auth } from '@supabase/auth-ui-react';
+import { useRouter } from 'next/router';
 
 import buttonStyles from '@/styles/atoms/Button/Button.module.css';
 import inputStyles from '@/styles/atoms/Input/Input.module.css';
@@ -7,9 +8,17 @@ import labelStyles from '@/styles/atoms/Label/Label.module.css';
 
 import { Account } from '@/components/molecules';
 
-const Register = () => {
+const Login = () => {
   const session = useSession();
   const supabase = useSupabaseClient();
+
+  const router = useRouter();
+
+  if (session) {
+    router.push(`/profile/${session.user.id}`);
+
+    return null;
+  }
 
   return (
     <>
@@ -37,4 +46,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;

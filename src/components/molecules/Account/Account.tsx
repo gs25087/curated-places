@@ -58,7 +58,6 @@ export const Account = (/* { session } */) => {
       }
 
       if (data) {
-        console.log('data', { data });
         reset({
           id: data.id,
           first_name: data.first_name,
@@ -85,7 +84,6 @@ export const Account = (/* { session } */) => {
   }
 
   async function updateProfile(data: IProfileFormData) {
-    console.log('updateProfile', { data });
     try {
       setLoading(true);
 
@@ -95,7 +93,6 @@ export const Account = (/* { session } */) => {
         updated_at: new Date().toISOString()
       };
 
-      console.log('x', { updates });
       const { error } = await supabase.from('profiles').upsert(updates);
       if (error) throw error;
 

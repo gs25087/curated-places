@@ -50,10 +50,7 @@ export const PostCard = ({ post, tags }: IPostCardProps) => {
           )}
         </div>
         <div className="flex flex-wrap items-end">
-          <div className="  w-4/6 text-xs text-gray-500">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa rem doloremque adipisci
-            nam ipsa! Nihil.
-          </div>
+          <div className="w-4/6 text-xs text-gray-500">{post.description}</div>
           <div className=" flex w-2/6 flex-col items-end text-right text-2xs text-black underline">
             <div className="mb-2 hidden text-right text-gray-400">
               <BookmarkSimple size={20} weight="light" />

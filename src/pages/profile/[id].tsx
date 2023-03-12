@@ -1,6 +1,7 @@
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { IUserPosts } from 'src/types/types';
 
@@ -11,7 +12,6 @@ import { supabase } from '@/lib/supabase';
 export default function UserPosts({ user, posts }: IUserPosts) {
   const session = useSession();
   const supabase = useSupabaseClient();
-  const userIsOwner = session?.user?.id === user.id;
   const [publicAvatarUrl, setPublicAvatarUrl] = useState<string>('');
 
   const getAvatarPublicUrl = async (filename: string) => {
@@ -42,17 +42,24 @@ export default function UserPosts({ user, posts }: IUserPosts) {
             />
           )}
         </div>
-        {userIsOwner && (
-          <div>
-            <h1 className="mb-2  font-medium">{`${user.first_name} ${user.last_name}`}</h1>
-            <div className="text-sm">{`${posts.length} posts`}</div>
-          </div>
-        )}
+
+        <div>
+          <h1 className="ml-2  font-medium">{`${user.first_name} ${user.last_name}`}</h1>
+          <div className="ml-2 text-sm">{`${posts.length} post${
+            posts.length > 1 ? 's' : ''
+          } `}</div>
+
+          {session?.user?.id === user.id && (
+            <Link
+              className="mt-6 block w-fit rounded-lg bg-gray-100 px-3 py-1 text-center text-xs"
+              href="/profile/edit"
+            >
+              Edit Profile
+            </Link>
+          )}
+        </div>
       </div>
-      <div className="mb-8 flex gap-x-4 px-pageMargin">
-        <div className="w-1/2 rounded-lg bg-gray-100 p-3 text-center text-xs">Edit Profile</div>
-        <div className="w-1/2 rounded-lg bg-gray-100 p-3 text-center text-xs">Share Profile</div>
-      </div>
+
       <div className="mb-4">
         {posts.map((post) => (
           <PostCard key={post.id} post={post} tags={post.tags} />

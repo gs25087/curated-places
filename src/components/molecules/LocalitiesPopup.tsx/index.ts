@@ -1,0 +1,1 @@
+export { LocalitiesPopup } from './LocalitiesPopup';

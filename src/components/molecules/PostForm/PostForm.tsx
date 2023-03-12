@@ -71,7 +71,6 @@ export const PostForm = () => {
 
   //const handleUpdate = async (currentPost: IPost, data: IAddPostFormData) => {};
   const onSubmit: SubmitHandler<IAddPostFormData> = async (data) => {
-    console.log('data', data);
     // setSubmitting(false);
     if (user) {
       /*  if (post) {

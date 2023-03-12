@@ -1,9 +1,7 @@
 import { useMapContext } from '@/context/MapContext/MapContext';
 import { ACTIONS } from '@/context/MapContext/MapReducer';
-import cookie from 'cookie';
 import { ReactElement, useEffect, useState } from 'react';
-
-import { TAGS_KEY } from '@/lib/tags';
+import { IMapContext } from 'src/types/types';
 
 interface IProps {
   icon?: ReactElement;
@@ -31,18 +29,17 @@ const padding: Padding = {
 };
 
 export const Tag = ({ icon, size = 'sm', id, filter }: IProps): JSX.Element => {
-  const { state, dispatch } = useMapContext();
+  //@ts-ignore
+  const { state, dispatch } = useMapContext<IMapContext>();
+
   const [tagItem, setTagItem] = useState<Tag>();
   useEffect(() => {
-    // This code will only run client-side
-    const tagsCookie = cookie.parse(document.cookie)[TAGS_KEY];
-    const tagItems = JSON.parse(tagsCookie);
-    //@ts-ignore
-    const tag: Tag = Object.values(tagItems).find((tag: Tag) => {
+    const tags = state?.tags;
+    const tag: Tag = tags?.find((tag: Tag) => {
       return tag.id === id;
     });
     setTagItem(tag);
-  }, []);
+  }, [state?.tags]);
 
   return (
     <>
@@ -52,10 +49,10 @@ export const Tag = ({ icon, size = 'sm', id, filter }: IProps): JSX.Element => {
 				${size ? padding[size] : padding['sm']}
 				text-${size ? size : 'sm'}  
 				${filter ? 'cursor-pointer' : ''} 
-        ${state.tag === id ? 'bg-primary-LIGHT' : 'bg-white'} `}
+        ${state?.tag === id ? 'bg-primary-LIGHT' : 'bg-white'} `}
           onClick={() => {
             if (filter) {
-              if (state.tag === id) {
+              if (state?.tag === id) {
                 dispatch({ type: ACTIONS.SET_TAG, payload: null });
               } else {
                 dispatch({ type: ACTIONS.SET_TAG, payload: id });

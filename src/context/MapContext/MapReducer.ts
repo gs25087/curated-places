@@ -1,16 +1,20 @@
-import { IMapContext } from 'src/types/types';
+import { Action, IMapContext, ITag } from 'src/types/types';
 
-interface IAction {
-  type: string;
-  payload: number | null;
-}
+export const ACTIONS = {
+  SET_TAG: 'SET_TAG',
+  SAVE_TAGS: 'SAVE_TAGS',
+  SAVE_LOCALITIES: 'SAVE_LOCALITIES',
+  OPEN_LOCALITIESPOPUP: 'OPEN_LOCALITIESPOPUP'
+};
 
 export const initialState = {
   tag: null,
-  openCityPopup: false
+  openLocalitiesPopup: false,
+  tags: [],
+  localities: []
 };
 
-export const MapReducer = (state: IMapContext, action: IAction) => {
+export const MapReducer = (state: IMapContext, action: Action) => {
   switch (action.type) {
     case ACTIONS.SET_TAG: {
       return {
@@ -18,16 +22,23 @@ export const MapReducer = (state: IMapContext, action: IAction) => {
         tag: action.payload
       };
     }
-    case ACTIONS.OPEN_CITYPOPUP: {
+    case ACTIONS.OPEN_LOCALITIESPOPUP: {
       return {
         ...state,
-        openCityPopup: action.payload
+        openLocalitiesPopup: action.payload
+      };
+    }
+    case ACTIONS.SAVE_TAGS: {
+      return {
+        ...state,
+        tags: action.payload
+      };
+    }
+    case ACTIONS.SAVE_LOCALITIES: {
+      return {
+        ...state,
+        localities: action.payload
       };
     }
   }
-};
-
-export const ACTIONS = {
-  SET_TAG: 'SET_TAG',
-  OPEN_CITYPOPUP: 'OPEN_CITYPOPUP'
 };
