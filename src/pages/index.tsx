@@ -11,6 +11,7 @@ import { LocalitiesPopup } from '@/components/molecules/LocalitiesPopup.tsx';
 const HomePage: NextPage = ({ postData }) => {
   // @ts-ignore
   const { state } = useMapContext();
+  console.log(state);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [state?.tag]);
@@ -26,14 +27,17 @@ const HomePage: NextPage = ({ postData }) => {
       <div className="relative ">
         {state?.tags && state?.tags.length > 0 && <TagBar tags={state.tags} />}
         {postData.map((post: any) => {
-          if (state && state?.tag)
+          if (state && state.tag && (state.locality === '' || post?.locality === state.locality))
             return (
               post?.tags?.includes(state.tag) && (
                 <PostCard key={post.id} post={post} tags={post.tags} />
               )
             );
 
-          return <PostCard key={post.id} post={post} tags={post.tags} />;
+          if (state && !state.tag && (state.locality === '' || post?.locality === state.locality))
+            return <PostCard key={post.id} post={post} tags={post.tags} />;
+
+          return null;
         })}
       </div>
     </>

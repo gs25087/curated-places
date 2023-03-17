@@ -1,4 +1,4 @@
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import React, { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
 
 import { ACTIONS, initialState, MapReducer } from './MapReducer';
@@ -10,6 +10,33 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
   //@ts-ignore
   const [state, dispatch] = useReducer(MapReducer, initialState);
   const supabase = useSupabaseClient();
+
+  const user = useUser();
+
+  useEffect(() => {
+    const fetchUserLocality = async () => {
+      const { data, error, status } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user?.id)
+        .single();
+
+      if (error) {
+        console.error(error);
+
+        return;
+      }
+      //@ts-ignore
+      dispatch({ type: ACTIONS.SET_LOCALITY, payload: data });
+    };
+
+    if (user?.id) {
+      fetchUserLocality();
+    } else {
+      //@ts-ignore
+      dispatch({ type: ACTIONS.SET_LOCALITY, payload: '' });
+    }
+  }, []);
 
   useEffect(() => {
     const fetchTags = async () => {

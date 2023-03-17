@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { BookmarkSimple } from 'phosphor-react';
 import React, { useEffect, useState } from 'react';
-import { IAuthor, IPostCardProps, IUser } from 'src/types/types';
+import { IAuthor, IPostCardProps } from 'src/types/types';
 
 import { Tag } from '@/components/atoms/Tag';
 

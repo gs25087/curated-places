@@ -103,10 +103,16 @@ export type Action =
   | { type: typeof ACTIONS.SET_TAG; payload: string }
   | { type: typeof ACTIONS.OPEN_LOCALITIESPOPUP; payload: boolean }
   | { type: typeof ACTIONS.SAVE_TAGS; payload: ITag[] }
-  | { type: typeof ACTIONS.SAVE_LOCALITIES; payload: string[] };
+  | { type: typeof ACTIONS.SAVE_LOCALITIES; payload: string[] }
+  | { type: typeof ACTIONS.SET_LOCALITY; payload: string };
 
 export interface IAvatarProps {
   avatarFilePath: string | null;
   size: number;
   onUpload: (filePath: string, file: File) => void;
+}
+
+export interface ILocalityUpdates {
+  id: string | undefined;
+  locality: string;
 }

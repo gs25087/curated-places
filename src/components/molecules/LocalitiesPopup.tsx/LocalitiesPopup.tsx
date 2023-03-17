@@ -1,12 +1,30 @@
 import { useMapContext } from '@/context/MapContext/MapContext';
 import { ACTIONS } from '@/context/MapContext/MapReducer';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from 'react';
+import { ILocalityUpdates } from 'src/types/types';
 
 export const LocalitiesPopup = () => {
   const [localities, setLocalities] = useState<string[]>([]);
+  const supabase = useSupabaseClient();
+  const session = useSession();
+  const id = session?.user.id;
 
   // @ts-ignore
   const { state, dispatch } = useMapContext();
+
+  async function setUserLocality(updates: ILocalityUpdates) {
+    if (id === undefined) return;
+    try {
+      const { error } = await supabase.from('profiles').upsert(updates);
+
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      // handle error
+    }
+  }
 
   useEffect(() => {
     const localities = state.localities;
@@ -28,7 +46,13 @@ export const LocalitiesPopup = () => {
             <div
               className="py-0.25 locality mr-0.5 cursor-pointer rounded-full border border-black  bg-white px-2.5 text-center shadow transition-colors last:mr-0"
               onClick={() => {
-                dispatch({ type: ACTIONS.OPEN_LOCALITIESPOPUP, payload: true });
+                dispatch({ type: ACTIONS.OPEN_LOCALITIESPOPUP, payload: false });
+                dispatch({ type: ACTIONS.SET_LOCALITY, payload: locality });
+                const localiytUpdates: ILocalityUpdates = {
+                  id,
+                  locality
+                };
+                setUserLocality(localiytUpdates);
               }}
             >
               {locality}
