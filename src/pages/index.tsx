@@ -11,7 +11,6 @@ import { LocalitiesPopup } from '@/components/molecules/LocalitiesPopup.tsx';
 const HomePage: NextPage = ({ postData }) => {
   // @ts-ignore
   const { state } = useMapContext();
-  console.log(state);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [state?.tag]);

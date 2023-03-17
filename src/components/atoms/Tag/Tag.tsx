@@ -45,9 +45,10 @@ export const Tag = ({ icon, size = 'sm', id, filter }: IProps): JSX.Element => {
     <>
       {tagItem && tagItem?.label && (
         <div
-          className={`py-0.25 mr-0.5 flex items-center  gap-x-1 overflow-hidden whitespace-nowrap rounded-full border border-black  px-2.5 shadow transition-colors last:mr-0
+          className={`py-0.25 tap-transparent mr-0.5 flex items-center  gap-x-1 overflow-hidden whitespace-nowrap rounded-full border border-black  px-2.5 shadow transition-colors last:mr-0
 				${size ? padding[size] : padding['sm']}
-				text-${size ? size : 'sm'}  
+				text-${size ? size : 'sm'}     
+
 				${filter ? 'cursor-pointer' : ''} 
         ${state?.tag === id ? 'bg-primary-LIGHT' : 'bg-white'} `}
           onClick={() => {

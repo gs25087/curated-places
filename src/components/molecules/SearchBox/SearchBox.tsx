@@ -117,6 +117,7 @@ const ReadySearchBox = ({
         })
         .then((response) => {
           const data = response.data;
+          console.log(data);
           if (data.result && data.result.photos && data.result.photos.length > 0) {
             const numberOfPhotos = data.result.photos.length;
             const photoArr =
@@ -147,7 +148,7 @@ const ReadySearchBox = ({
         <ComboboxInput
           onChange={handleChange}
           disabled={!ready}
-          placeholder="Search your location"
+          placeholder="Search a place/location/address"
           autoComplete="off"
           className={`${styles.input} mb-2`}
         />

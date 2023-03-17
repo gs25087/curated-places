@@ -15,6 +15,11 @@ export const PlacePhotos: React.FC<IPostPhotosProps> = ({ photoUrls }) => {
         clickable: true
       }}
       style={{ width: '100%' }}
+      space-between="10"
+      mousewheel={true}
+      mousewheel-force-to-axis={true}
+      free-mode={true}
+      momentum-bounce={false}
     >
       {/*  <SwiperSlide className="mr-4 inline-block" style={{ height: '300px', width: '100px' }}>
         <div className="flex h-full w-full items-center justify-around bg-primary-LIGHT">
