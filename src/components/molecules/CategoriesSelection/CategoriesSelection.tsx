@@ -1,6 +1,5 @@
 import { useMapContext } from '@/context/MapContext/MapContext';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
+import { ACTIONS } from '@/context/MapContext/MapReducer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -17,19 +16,68 @@ import {
   Buildings
 } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
-import { ICategory, ITaxonomyBase, PhosphorIcons } from 'src/types/types';
+import { Subcategory } from 'src/types/taxonomy/taxonomy';
+import { ICategory, ISubCategory, PhosphorIcons } from 'src/types/types';
 
-export const CategoriesSelection = () => {
-  //@ts-ignore
-  const { state } = useMapContext();
-  const [categories, setCategories] = useState([]);
+export const CategoriesSelection = ({ setOpen }: { setOpen?: (arg0: boolean) => void }) => {
+  const [categoryTree, setCategoryTree] = useState<ICategory[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [subcategories, setSubcategories] = useState<ISubCategory[]>([]);
+  const [subsubcategories, setSubsubcategories] = useState<ISubCategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<number | null>(null);
+
+  //@ts-ignore
+  const { state, dispatch } = useMapContext<IMapContext>();
 
   useEffect(() => {
-    if (state.tags) {
-      setCategories(state.tags);
+    if (state.categoryTree) {
+      setCategoryTree(state.categoryTree);
     }
-  }, [state.tags]);
+  }, [state.categoryTree]);
+
+  useEffect(() => {
+    if (state.categories) {
+      setCategories(state.categories);
+    }
+  }, [state.categories]);
+
+  useEffect(() => {
+    if (state.subcategories) {
+      setSubcategories(state.subcategories);
+    }
+  }, [state.subcategories]);
+
+  useEffect(() => {
+    if (state.subsubcategories) {
+      setSubsubcategories(state.subsubcategories);
+    }
+  }, [state.subsubcategories]);
+
+  const handleClick = (id: number, level: number) => {
+    if (state?.taxonomy.id === id && state?.taxonomy.level === level) {
+      dispatch({ type: ACTIONS.SET_TAXONOMY, payload: { id: null, level: null } });
+    } else {
+      dispatch({ type: ACTIONS.SET_TAXONOMY, payload: { id, level } });
+    }
+    if (setOpen) setOpen(false);
+  };
+
+  function findObjectById(obj: { [key: string]: any }, id: number) {
+    const arr = Object.values(obj);
+
+    return arr.find((obj) => obj.id === id);
+  }
+  function getSubcategories(categoryId: number): Subcategory[] {
+    const category = findObjectById(categoryTree, categoryId);
+
+    if (!category) return [];
+
+    const subcategories = category.subcategories;
+    if (!subcategories) return [];
+
+    return Object.values(subcategories);
+  }
 
   function renderIcon(iconName: string) {
     const PhosphorIcons: PhosphorIcons = {
@@ -52,28 +100,25 @@ export const CategoriesSelection = () => {
   }
 
   return (
-    <div className="fixed top-0 mx-auto -ml-[3rem] mt-notHomeNavHeight min-h-[theme(spacing.notHomeMain)] w-full max-w-full  bg-white md:max-w-md">
+    <div className="mt-notHomeNavHeight h-[theme(spacing.notHomeMain)] w-full max-w-full  bg-white md:max-w-md">
       <div className="py-pageMarginM px-pageMarginM">
-        <input type="Search" placeholder="Search more categories" />
-
-        <Divider />
-
         {selectedCategory && (
-          <nav aria-label="main mailbox folders">
+          <nav aria-label="szbcategories">
             <List>
-              {categories.length > 0 &&
-                categories.map((category: ITaxonomyBase) => (
-                  <ListItem
-                    key="category.id"
-                    sx={{ paddingLeft: 0, paddingRight: 0 }}
-                    disablePadding
-                    onClick={() => setSelectedCategory(null)}
-                  >
-                    <ListItemButton sx={{ paddingLeft: 0, paddingRight: 0 }}>
-                      <ListItemText primary={category.label} />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
+              {selectedCategory &&
+                getSubcategories(selectedCategory).map((subcategory: Subcategory) => {
+                  return (
+                    <ListItem
+                      key={subcategory.id}
+                      disablePadding
+                      onClick={() => setSelectedCategory(null)}
+                    >
+                      <ListItemButton onClick={() => handleClick(subcategory.id, 1)}>
+                        <ListItemText primary={subcategory.label} />
+                      </ListItemButton>
+                    </ListItem>
+                  );
+                })}
             </List>
           </nav>
         )}
@@ -83,7 +128,7 @@ export const CategoriesSelection = () => {
               {categories.length > 0 &&
                 categories.map((category: ICategory) => (
                   <ListItem
-                    key="category.id"
+                    key={category.id}
                     disablePadding
                     onClick={() => setSelectedCategory(category.id)}
                   >

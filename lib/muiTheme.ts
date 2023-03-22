@@ -8,6 +8,22 @@ export const muiTheme = {
         }
       }
     },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          // Add your global styles for ListItem here
+          width: '100%',
+          maxWidth: 'none'
+        }
+      }
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'rgba(256, 256, 256, 1)'
+        }
+      }
+    },
     MuiIconButton: {
       styleOverrides: {
         root: {
@@ -30,11 +46,7 @@ export const muiTheme = {
           // Add your global styles for ListItem here
           backgroundColor: 'transparent',
           borderRadius: '5px',
-          marginBottom: '2px',
-          '&:hover': {
-            backgroundColor: 'blue',
-            color: 'white'
-          }
+          marginBottom: '2px'
         }
       }
     }

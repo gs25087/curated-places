@@ -48,7 +48,7 @@ const HomePage: NextPage = ({ postData }) => {
       {state?.openLocalitiesPopup && state?.localities.length > 0 && <LocalitiesPopup />}
       <div className="relative ">
         {state?.tax_suggestions && state?.tax_suggestions.length > 0 && <TaxonomyBar />}
-        {filterPosts(postData).map((post: any) => (
+        {filterPosts(postData).map((post: IPost) => (
           <PostCard
             key={post.id}
             post={post}

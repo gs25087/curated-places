@@ -1,11 +1,16 @@
+import Skeleton from '@mui/material/Skeleton';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import { IPostPhotosProps } from 'src/types/types';
 import { Swiper, SwiperSlide } from 'swiper/react';
+
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { extractWidthFromUrl } from '@/lib/helpers';
 
 export const PlacePhotos: React.FC<IPostPhotosProps> = ({ photoUrls }) => {
+  const [loaded, setLoaded] = useState(false);
+
   return (
     <Swiper
       slidesPerView={'auto'}
@@ -21,23 +26,35 @@ export const PlacePhotos: React.FC<IPostPhotosProps> = ({ photoUrls }) => {
       free-mode="true"
       momentum-bounce="false"
     >
-      {/*  <SwiperSlide className="mr-4 inline-block" style={{ height: '300px', width: '100px' }}>
-        <div className="flex h-full w-full items-center justify-around bg-primary-LIGHT">
-          Add your photo
-        </div>
-      </SwiperSlide> */}
       {photoUrls.length > 0 &&
-        photoUrls.map((photoUrl) => (
-          <SwiperSlide key={photoUrl} style={{ width: 'auto' }}>
-            <Image
-              src={photoUrl}
-              width={200}
-              height={128}
-              alt="Place photo"
-              className="aspect-auto h-[128px] w-auto rounded-lg object-contain"
-            />
-          </SwiperSlide>
-        ))}
+        photoUrls.map((photoUrl) => {
+          const ImgWidth = extractWidthFromUrl(photoUrl) || 200;
+
+          return (
+            <SwiperSlide key={photoUrl} style={{ width: 'auto' }}>
+              {loaded ? null : (
+                <Skeleton
+                  animation="wave"
+                  variant="rectangular"
+                  width={ImgWidth}
+                  height={128}
+                  className="rounded-lg"
+                />
+              )}
+              <Image
+                src={photoUrl}
+                width={ImgWidth}
+                height={128}
+                alt="Place photo"
+                className={`aspect-auto h-[128px]  w-auto rounded-lg object-contain ${
+                  loaded ? '' : 'absolute opacity-0'
+                }`}
+                style={{ width: 'auto' }}
+                onLoad={() => setLoaded(true)}
+              />
+            </SwiperSlide>
+          );
+        })}
     </Swiper>
   );
 };

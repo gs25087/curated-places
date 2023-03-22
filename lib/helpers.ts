@@ -1,3 +1,6 @@
+import { CategoryTree } from 'src/types/taxonomy/taxonomy';
+import { ICategory, ISubCategory, ISubSubCategory } from 'src/types/types';
+
 export const getDateString = (unixTimestamp: string | undefined) => {
   if (!unixTimestamp) {
     return '';
@@ -13,4 +16,50 @@ export const getDateString = (unixTimestamp: string | undefined) => {
   const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+};
+
+export const extractWidthFromUrl = (url: string) => {
+  const regex = /-w(\d+)/;
+  const match = url.match(regex);
+  if (match && match[1]) {
+    return parseInt(match[1]);
+  }
+
+  return null;
+};
+
+export const generateCategoryTree = (
+  categories: ICategory[],
+  subcategories: ISubCategory[],
+  subsubcategories: ISubSubCategory[]
+) => {
+  const categoryTree: CategoryTree = {};
+  categories.forEach((category) => {
+    categoryTree[category.label] = {
+      id: category.id,
+      label: category.label,
+      subcategories: {}
+    };
+    subcategories.forEach((subcategory) => {
+      if (subcategory.category === category.id) {
+        categoryTree[category.label].subcategories[subcategory.label] = {
+          id: subcategory.id,
+          label: subcategory.label,
+          subsubcategories: {}
+        };
+        subsubcategories.forEach((subsubcategory) => {
+          if (subsubcategory.subcategory === subcategory.id) {
+            categoryTree[category.label].subcategories[subcategory.label].subsubcategories[
+              subsubcategory.label
+            ] = {
+              id: subsubcategory.id,
+              label: subsubcategory.label
+            };
+          }
+        });
+      }
+    });
+  });
+
+  return categoryTree;
 };

@@ -9,7 +9,8 @@ export const ACTIONS = {
   SAVE_TYPES: 'SAVE_TYPES',
   SAVE_LOCALITIES: 'SAVE_LOCALITIES',
   OPEN_LOCALITIESPOPUP: 'OPEN_LOCALITIESPOPUP',
-  SET_LOCALITY: 'SET_LOCALITY'
+  SET_LOCALITY: 'SET_LOCALITY',
+  SAVE_CATEGORY_TREE: 'SAVE_CATEGORY_TREE'
 };
 
 export const initialState = {
@@ -18,6 +19,7 @@ export const initialState = {
   categories: [],
   subcategories: [],
   subsubcategories: [],
+  categoryTree: [],
   localities: [],
   locality: ''
 };
@@ -70,6 +72,12 @@ export const MapReducer = (state: IMapContext, action: Action) => {
       return {
         ...state,
         locality: action.payload
+      };
+    }
+    case ACTIONS.SAVE_CATEGORY_TREE: {
+      return {
+        ...state,
+        categoryTree: action.payload
       };
     }
   }

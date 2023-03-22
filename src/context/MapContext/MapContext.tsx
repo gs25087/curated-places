@@ -1,5 +1,9 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import React, { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
+import { CategoryTree } from 'src/types/taxonomy/taxonomy';
+import { ICategory, ISubCategory, ISubSubCategory } from 'src/types/types';
+
+import { generateCategoryTree } from '@/lib/helpers';
 
 import { ACTIONS, initialState, MapReducer } from './MapReducer';
 
@@ -27,7 +31,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
         return;
       }
       //@ts-ignore
-      dispatch({ type: ACTIONS.SET_LOCALITY, payload: data });
+      dispatch({ type: ACTIONS.SET_LOCALITY, payload: data.locality });
     };
 
     if (user?.id) {
@@ -49,6 +53,8 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
       }
       //@ts-ignore
       dispatch({ type: ACTIONS.SAVE_CATEGORIES, payload: data });
+
+      return data;
     };
     const fetchSubcategories = async () => {
       const { data, error } = await supabase.from('subcategories').select('*');
@@ -60,6 +66,8 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
       }
       //@ts-ignore
       dispatch({ type: ACTIONS.SAVE_SUBCATEGORIES, payload: data });
+
+      return data;
     };
 
     const fetchSubsubcategories = async () => {
@@ -72,6 +80,8 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
       }
       //@ts-ignore
       dispatch({ type: ACTIONS.SAVE_SUBSUBCATEGORIES, payload: data });
+
+      return data;
     };
 
     const fetchTaxSuggestions = async () => {
@@ -86,9 +96,17 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
       dispatch({ type: ACTIONS.SAVE_TAX_SUGGESTIONS, payload: data });
     };
 
-    fetchCategories();
-    fetchSubcategories();
-    fetchSubsubcategories();
+    Promise.all([fetchCategories(), fetchSubcategories(), fetchSubsubcategories()])
+      .then(([categories, subcategories, subsubcategories]) => {
+        const categoryTree: CategoryTree = generateCategoryTree(
+          categories as ICategory[],
+          subcategories as ISubCategory[],
+          subsubcategories as ISubSubCategory[]
+        );
+        //@ts-ignore
+        dispatch({ type: ACTIONS.SAVE_CATEGORY_TREE, payload: categoryTree });
+      })
+      .catch((error) => console.error('Error creating nested object:', error));
     fetchTaxSuggestions();
   }, []);
 

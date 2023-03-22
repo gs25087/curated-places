@@ -138,19 +138,25 @@ export interface ILocality {
 }
 
 export interface IMapContext {
-  tag: number | null;
+  taxonomy: { id: number | null; level: number | null };
   openLocalitiesPopup: boolean;
-  tags: ITags[];
   localities: string[];
   types: IPlaceType[];
+  categories: ICategory[];
+  subcategories: ISubCategory[];
+  subsubcategories: ISubSubCategory[];
 }
 
 export type Action =
   | { type: typeof ACTIONS.SET_TAG; payload: string }
   | { type: typeof ACTIONS.OPEN_LOCALITIESPOPUP; payload: boolean }
-  | { type: typeof ACTIONS.SAVE_TAGS; payload: ITag[] }
+  | { type: typeof ACTIONS.SAVE_TAXONOMY; payload: { id: number | null; level: number | null } }
   | { type: typeof ACTIONS.SAVE_LOCALITIES; payload: string[] }
-  | { type: typeof ACTIONS.SET_LOCALITY; payload: string };
+  | { type: typeof ACTIONS.SET_LOCALITY; payload: string }
+  | { type: typeof ACTIONS.SAVE_CATEGORIES; payload: ICategory[] }
+  | { type: typeof ACTIONS.SAVE_SUBCATEGORIES; payload: ISubCategory[] }
+  | { type: typeof ACTIONS.SAVE_SUBSUBCATEGORIES; payload: ISubSubCategory[] }
+  | { type: typeof ACTIONS.SAVE_CATEGORY_TREE; payload: CategoryTree };
 
 export interface IAvatarProps {
   avatarFilePath: string | null;
