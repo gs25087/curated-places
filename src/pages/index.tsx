@@ -1,11 +1,14 @@
 import { useMapContext } from '@/context/MapContext/MapContext';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import type { GetServerSideProps, NextApiRequest, NextApiResponse, NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect } from 'react';
+import { IPost } from 'src/types/types';
 
-import { PostCard, TagBar } from '@/components/molecules/';
+import { PostCard, TaxonomyBar } from '@/components/molecules/';
 import { LocalitiesPopup } from '@/components/molecules/LocalitiesPopup.tsx';
+
+import { taxonomyLevelNames } from '@/lib/taxonomy';
 
 // @ts-ignore
 const HomePage: NextPage = ({ postData }) => {
@@ -13,7 +16,27 @@ const HomePage: NextPage = ({ postData }) => {
   const { state } = useMapContext();
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [state?.tag]);
+  }, [state?.taxonomy.id]);
+
+  const filterPosts = (posts: IPost[]) => {
+    return posts.filter((post: IPost) => {
+      if (
+        state &&
+        state.taxonomy.id &&
+        state.taxonomy.level &&
+        (state.locality === '' || post?.locality === state.locality)
+      ) {
+        const stateTaxonomyLevel = state.taxonomy.level as keyof typeof taxonomyLevelNames;
+        const taxonomyName = taxonomyLevelNames[stateTaxonomyLevel] as string;
+
+        return post[taxonomyName as keyof IPost] === state.taxonomy.id;
+      } else if (!state.taxonomy.id && !state.taxonomy.level && state.locality !== '') {
+        return post?.locality === state.locality;
+      } else if (!state.taxonomy.id && !state.taxonomy.level && state.locality === '') {
+        return true;
+      }
+    });
+  };
 
   return (
     <>
@@ -24,20 +47,18 @@ const HomePage: NextPage = ({ postData }) => {
       </Head>
       {state?.openLocalitiesPopup && state?.localities.length > 0 && <LocalitiesPopup />}
       <div className="relative ">
-        {state?.tags && state?.tags.length > 0 && <TagBar tags={state.tags} />}
-        {postData.map((post: any) => {
-          if (state && state.tag && (state.locality === '' || post?.locality === state.locality))
-            return (
-              post?.tags?.includes(state.tag) && (
-                <PostCard key={post.id} post={post} tags={post.tags} />
-              )
-            );
-
-          if (state && !state.tag && (state.locality === '' || post?.locality === state.locality))
-            return <PostCard key={post.id} post={post} tags={post.tags} />;
-
-          return null;
-        })}
+        {state?.tax_suggestions && state?.tax_suggestions.length > 0 && <TaxonomyBar />}
+        {filterPosts(postData).map((post: any) => (
+          <PostCard
+            key={post.id}
+            post={post}
+            category={post.category}
+            subcategory={post.subcategory}
+            subcategory_2={post.subcategory_2}
+            subsubcategory={post.subsubcategory}
+            subsubcategory_2={post.subsubcategory_2}
+          />
+        ))}
       </div>
     </>
   );

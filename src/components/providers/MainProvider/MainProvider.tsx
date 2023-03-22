@@ -1,8 +1,13 @@
 import { AppWrapper } from '@/context/MapContext/MapContext';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { AppProps } from 'next/app';
 import { ReactNode, useState } from 'react';
+
+import { muiTheme } from '@/lib/muiTheme';
+
+const theme = createTheme(muiTheme);
 
 interface Props {
   children: ReactNode;
@@ -14,7 +19,9 @@ export const MainProvider = ({ children, pageProps }: Props) => {
 
   return (
     <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
-      <AppWrapper>{children}</AppWrapper>
+      <ThemeProvider theme={theme}>
+        <AppWrapper>{children}</AppWrapper>
+      </ThemeProvider>
     </SessionContextProvider>
   );
 };

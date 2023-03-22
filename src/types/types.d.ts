@@ -1,4 +1,5 @@
 import { ACTIONS } from '@/context/MapContext/MapReducer';
+import { type } from 'os';
 
 export interface IPost {
   author: string;
@@ -9,7 +10,12 @@ export interface IPost {
   description: string | null;
   latitude: number | null;
   longitude: number | null;
-  tags: number[];
+  locality: string | null;
+  category: number;
+  subcategory: number;
+  subcategory_2: number;
+  subsubcategory: number;
+  subsubcategory_2: number;
 }
 
 export interface IFormStatusMessage {
@@ -74,19 +80,58 @@ export interface IPostPhotosProps {
 
 export interface IPostCardProps {
   post: IPost;
-  tags: Tags[];
+  category: number;
+  subcategory: number;
+  subcategory_2: number;
+  subsubcategory: number;
+  subsubcategory_2: number;
 }
 
-export interface ITags {
-  tags: number[];
+export interface ITaxonomyButtonProps {
+  label: string;
+  level: number;
+  id: number;
+  size?: string;
+  filter?: boolean;
 }
 
-export interface ITag {
+export interface IPlaceType {
   id: number;
   label: string;
   created_at: string;
-  posts: number[];
+  type: string;
 }
+
+export interface ICategory {
+  id: number;
+  label: string;
+  created_at: string;
+  icon: string;
+}
+
+export interface ITaxonomyBase {
+  id: number;
+  label: string;
+  created_at: string;
+}
+
+export interface ICategory extends ITaxonomyBase {
+  icon: string;
+}
+
+export interface ISubCategory extends ITaxonomyBase {
+  icon: string;
+  category: number;
+}
+
+export interface ISubSubCategory extends ITaxonomyBase {
+  icon: string;
+  subcategory: number;
+}
+
+export type PhosphorIcons = {
+  [key: string]: React.ElementType;
+};
 
 export interface ILocality {
   localities: string[];
@@ -97,6 +142,7 @@ export interface IMapContext {
   openLocalitiesPopup: boolean;
   tags: ITags[];
   localities: string[];
+  types: IPlaceType[];
 }
 
 export type Action =

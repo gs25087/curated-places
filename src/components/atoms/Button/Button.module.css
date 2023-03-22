@@ -1,3 +1,4 @@
 .button {
-  @apply flex  cursor-pointer items-center  gap-x-1 rounded-full  border border-black  py-1 px-4 text-black transition-colors  hover:bg-primary hover:shadow-primary-100 !important;
+  @apply flex cursor-pointer  items-center gap-x-1  rounded-full border  border-black py-1 px-4 text-black  transition-colors hover:bg-primary hover:shadow-primary-100 !important;
+  -webkit-tap-highlight-color: transparent;
 }

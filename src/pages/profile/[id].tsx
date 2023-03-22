@@ -30,24 +30,21 @@ export default function UserPosts({ user, posts }: IUserPosts) {
   return (
     <>
       <div className="mb-4 flex gap-x-4 px-pageMargin">
-        <div>
-          {publicAvatarUrl && (
-            <Image
-              src={publicAvatarUrl}
-              priority
-              alt="Avatar"
-              className="block h-[6rem] w-[6rem] rounded-full object-cover shadow-lg"
-              height={100}
-              width={100}
-            />
-          )}
-        </div>
+        {publicAvatarUrl && (
+          <Image
+            src={publicAvatarUrl}
+            priority
+            alt="Avatar"
+            className="ml-2 block h-[6rem] w-[6rem] rounded-full object-cover shadow-lg
+              "
+            height={100}
+            width={100}
+          />
+        )}
 
         <div>
-          <h1 className="ml-2  font-medium">{`${user.first_name} ${user.last_name}`}</h1>
-          <div className="ml-2 text-sm">{`${posts.length} post${
-            posts.length > 1 ? 's' : ''
-          } `}</div>
+          <h1 className="  font-medium">{`${user.first_name} ${user.last_name}`}</h1>
+          <div className=" text-sm">{`${posts.length} post${posts.length > 1 ? 's' : ''} `}</div>
 
           {session?.user?.id === user.id && (
             <Link
@@ -62,7 +59,15 @@ export default function UserPosts({ user, posts }: IUserPosts) {
 
       <div className="mb-4">
         {posts.map((post) => (
-          <PostCard key={post.id} post={post} tags={post.tags} />
+          <PostCard
+            key={post.id}
+            post={post}
+            category={post.category}
+            subcategory={post.subcategory}
+            subcategory_2={post.subcategory_2}
+            subsubcategory={post.subsubcategory}
+            subsubcategory_2={post.subsubcategory_2}
+          />
         ))}
       </div>
     </>

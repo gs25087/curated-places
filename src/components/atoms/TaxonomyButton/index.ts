@@ -1,0 +1,1 @@
+export { TaxonomyButton } from './TaxonomyButton';

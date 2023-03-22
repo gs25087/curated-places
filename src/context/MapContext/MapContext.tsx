@@ -15,7 +15,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const fetchUserLocality = async () => {
-      const { data, error, status } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user?.id)
@@ -34,13 +34,13 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
       fetchUserLocality();
     } else {
       //@ts-ignore
-      dispatch({ type: ACTIONS.SET_LOCALITY, payload: '' });
+      dispatch({ type: ACTIONS.SET_LOCALITY, payload: 'Berlin' });
     }
   }, []);
 
   useEffect(() => {
-    const fetchTags = async () => {
-      const { data, error } = await supabase.from('tags').select('*');
+    const fetchCategories = async () => {
+      const { data, error } = await supabase.from('categories').select('*');
 
       if (error) {
         console.error(error);
@@ -48,14 +48,52 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
         return;
       }
       //@ts-ignore
-      dispatch({ type: ACTIONS.SAVE_TAGS, payload: data });
+      dispatch({ type: ACTIONS.SAVE_CATEGORIES, payload: data });
+    };
+    const fetchSubcategories = async () => {
+      const { data, error } = await supabase.from('subcategories').select('*');
+
+      if (error) {
+        console.error(error);
+
+        return;
+      }
+      //@ts-ignore
+      dispatch({ type: ACTIONS.SAVE_SUBCATEGORIES, payload: data });
     };
 
-    fetchTags();
+    const fetchSubsubcategories = async () => {
+      const { data, error } = await supabase.from('subsubcategories').select('*');
+
+      if (error) {
+        console.error(error);
+
+        return;
+      }
+      //@ts-ignore
+      dispatch({ type: ACTIONS.SAVE_SUBSUBCATEGORIES, payload: data });
+    };
+
+    const fetchTaxSuggestions = async () => {
+      const { data, error } = await supabase.from('tax_suggestions').select('*');
+
+      if (error) {
+        console.error(error);
+
+        return;
+      }
+      //@ts-ignore
+      dispatch({ type: ACTIONS.SAVE_TAX_SUGGESTIONS, payload: data });
+    };
+
+    fetchCategories();
+    fetchSubcategories();
+    fetchSubsubcategories();
+    fetchTaxSuggestions();
   }, []);
 
   useEffect(() => {
-    const fetchTags = async () => {
+    const fetchLocalities = async () => {
       const { data, error } = await supabase.from('posts').select('locality');
 
       if (error) {
@@ -75,7 +113,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
       }
     };
 
-    fetchTags();
+    fetchLocalities();
   }, []);
 
   const contextValue = useMemo(() => {

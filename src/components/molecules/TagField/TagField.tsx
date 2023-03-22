@@ -38,7 +38,6 @@ export const TagField = ({ onSelectTags }) => {
     if (selectedTag) {
       // Add the selected tag to the array of selected tags
       onSelectTags([...selectedTags, selectedTag.id]);
-      console.log([...selectedTags, selectedTag.id]);
 
       // Reset the input value
       setInputValue('');

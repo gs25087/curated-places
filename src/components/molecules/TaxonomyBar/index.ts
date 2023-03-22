@@ -1,0 +1,1 @@
+export { TaxonomyBar } from './TaxonomyBar';

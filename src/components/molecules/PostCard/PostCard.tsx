@@ -1,20 +1,54 @@
+import { BookmarkSimple } from '@phosphor-icons/react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { BookmarkSimple } from 'phosphor-react';
 import React, { useEffect, useState } from 'react';
 import { IAuthor, IPostCardProps } from 'src/types/types';
 
-import { Tag } from '@/components/atoms/Tag';
+import { TaxonomyButton } from '@/components/atoms/TaxonomyButton';
+
+import { useTaxonomies } from '@/lib/useTaxonomies';
 
 import { PlacePhotos } from '../PlacePhotos';
 
-export const PostCard = ({ post, tags }: IPostCardProps) => {
+export const PostCard = ({
+  post,
+  category,
+  subcategory,
+  subcategory_2,
+  subsubcategory,
+  subsubcategory_2
+}: IPostCardProps) => {
   const photos = post.photos ? JSON.parse(post.photos) : null;
   const supabase = useSupabaseClient();
   const router = useRouter();
   const isProfile = router.pathname.startsWith('/profile/');
 
+  const [postTaxonomyItem, setPostTaxonomyItem] = useState<{
+    id: number | null;
+    level: number | null;
+  }>({ id: null, level: null });
+
+  useEffect(() => {
+    let level, id;
+
+    if (subsubcategory) {
+      level = 2;
+      id = subsubcategory;
+    } else if (subcategory) {
+      level = 1;
+      id = subcategory;
+    } else {
+      level = null;
+      id = null;
+    }
+
+    const taxItem = { id, level };
+
+    setPostTaxonomyItem(taxItem);
+  }, []);
+
+  const { label, level, id } = useTaxonomies(postTaxonomyItem);
   const [author, setAuthor] = useState<string>('');
 
   async function fetchAuthorName() {
@@ -41,13 +75,11 @@ export const PostCard = ({ post, tags }: IPostCardProps) => {
 
         <div className="flex justify-between pt-1.5">
           <h1 className="mb-0.5 w-3/5 font-medium">{post.title}</h1>
-          {tags && tags.length > 0 && (
-            <div className="flex w-2/5 items-start justify-end ">
-              {tags.map((tagId) => (
-                <Tag key={tagId} id={tagId} size="xs" />
-              ))}
-            </div>
-          )}
+          <div className="flex w-2/5 items-start justify-end ">
+            {label && level && id && (
+              <TaxonomyButton size={'xs'} label={label} level={level} id={id} />
+            )}
+          </div>
         </div>
         <div className="flex flex-wrap items-end">
           <div className="w-4/6 text-xs text-gray-500">{post.description}</div>

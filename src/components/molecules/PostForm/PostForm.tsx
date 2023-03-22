@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FieldErrors, SubmitHandler, useForm } from 'react-hook-form';
-import { IAddPostFormData, IFormStatusMessage, ITag } from 'src/types/types';
+import { IAddPostFormData, IFormStatusMessage } from 'src/types/types';
 import * as yup from 'yup';
 
 import { FormStatusMessage, FormTitle, Input, Label, Textarea } from '@/components/atoms';
 import { Button } from '@/components/atoms/Button';
 import { SearchBox } from '@/components/molecules/SearchBox';
-import { TagField } from '@/components/molecules/TagField';
+
+import { CategoriesSelection } from '../CategoriesSelection';
 
 const schema = yup.object().shape({
   title: yup.string().required('Title is required'),
@@ -31,6 +32,8 @@ export const PostForm = () => {
     status: '',
     message: ''
   });
+
+  const [showCategories, setShowCategories] = useState(false);
 
   const { handleSubmit, setValue, formState, watch, register } = useForm<IAddPostFormData>({
     resolver: yupResolver(schema),
@@ -105,24 +108,32 @@ export const PostForm = () => {
          */}{' '}
       </div>
 
-      {address && (
-        <>
-          {/*   <TagField
+      {/* {address && ( */}
+      <>
+        {/*   <TagField
             onSelectTags={(tags: number) => {
               setValue('tags', tags);
             }}
-          /> */}
-          <Input name="title" label="Title" register={register} errors={errors.title} />
-          {/*           <ErrorMessage errors={errors} name="title" />
-           */}
-          <Textarea
-            name="description"
-            label="Description"
-            register={register}
-            errors={errors.description}
-          />
-        </>
-      )}
+          /> 
+
+        <div
+          className={`${styles.input} ${styles.fieldWrapper} text-gray-400`}
+          onClick={() => setShowCategories(true)}
+        >
+          Select category
+        </div>*/}
+        {showCategories && <CategoriesSelection />}
+        <Input name="title" label="Title" register={register} errors={errors.title} />
+        {/*           <ErrorMessage errors={errors} name="title" />
+         */}
+        <Textarea
+          name="description"
+          label="Description"
+          register={register}
+          errors={errors.description}
+        />
+      </>
+      {/*   )} */}
 
       {statusMessage.message && (
         <FormStatusMessage message={statusMessage.message} status={statusMessage.status} />

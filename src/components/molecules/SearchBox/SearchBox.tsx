@@ -117,7 +117,6 @@ const ReadySearchBox = ({
         })
         .then((response) => {
           const data = response.data;
-          console.log(data);
           if (data.result && data.result.photos && data.result.photos.length > 0) {
             const numberOfPhotos = data.result.photos.length;
             const photoArr =
