@@ -21,7 +21,7 @@ export const initialState = {
   subsubcategories: [],
   categoryTree: [],
   localities: [],
-  locality: ''
+  locality: 'Berlin'
 };
 
 export const MapReducer = (state: IMapContext, action: Action) => {

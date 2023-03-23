@@ -30,7 +30,6 @@ export interface IAddPostFormData {
   latitude: number | null;
   longitude: number | null;
   description: string;
-  tags: number[];
 }
 
 export interface IRole {

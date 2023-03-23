@@ -43,8 +43,7 @@ export const PostForm = () => {
       photos: '',
       latitude: 0,
       longitude: 0,
-      description: '',
-      tags: []
+      description: ''
     }
   });
 
@@ -110,11 +109,7 @@ export const PostForm = () => {
 
       {/* {address && ( */}
       <>
-        {/*   <TagField
-            onSelectTags={(tags: number) => {
-              setValue('tags', tags);
-            }}
-          /> 
+        {/*  
 
         <div
           className={`${styles.input} ${styles.fieldWrapper} text-gray-400`}

@@ -20,9 +20,9 @@ export const PostCard = ({
   subsubcategory_2
 }: IPostCardProps) => {
   const photos = post.photos ? JSON.parse(post.photos) : null;
-  const supabase = useSupabaseClient();
+  //const supabase = useSupabaseClient();
   const router = useRouter();
-  const isProfile = router.pathname.startsWith('/profile/');
+  //const isProfile = router.pathname.startsWith('/profile/');
 
   const [postTaxonomyItem, setPostTaxonomyItem] = useState<{
     id: number | null;
@@ -49,7 +49,7 @@ export const PostCard = ({
   }, []);
 
   const { label, level, id } = useTaxonomies(postTaxonomyItem);
-  const [author, setAuthor] = useState<string>('');
+  /*   const [author, setAuthor] = useState<string>('');
 
   async function fetchAuthorName() {
     const { data } = await supabase.from('profiles').select('*').eq('id', post.author).single();
@@ -60,7 +60,7 @@ export const PostCard = ({
 
   useEffect(() => {
     fetchAuthorName();
-  }, []);
+  }, []); */
 
   return (
     <div key={post.id} className={`w-full border-b-4 last:mb-32 last:border-b-0`}>
@@ -87,7 +87,8 @@ export const PostCard = ({
             <div className="mb-2 hidden text-right text-gray-400">
               <BookmarkSimple size={20} weight="light" />
             </div>
-            {!isProfile && <Link href={`/profile/${post.author}`}>{author}</Link>}
+            {/*             {!isProfile && <Link href={`/profile/${post.author}`}>{author}</Link>}
+             */}{' '}
           </div>
         </div>
       </div>

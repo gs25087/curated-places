@@ -96,21 +96,6 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
       dispatch({ type: ACTIONS.SAVE_TAX_SUGGESTIONS, payload: data });
     };
 
-    Promise.all([fetchCategories(), fetchSubcategories(), fetchSubsubcategories()])
-      .then(([categories, subcategories, subsubcategories]) => {
-        const categoryTree: CategoryTree = generateCategoryTree(
-          categories as ICategory[],
-          subcategories as ISubCategory[],
-          subsubcategories as ISubSubCategory[]
-        );
-        //@ts-ignore
-        dispatch({ type: ACTIONS.SAVE_CATEGORY_TREE, payload: categoryTree });
-      })
-      .catch((error) => console.error('Error creating nested object:', error));
-    fetchTaxSuggestions();
-  }, []);
-
-  useEffect(() => {
     const fetchLocalities = async () => {
       const { data, error } = await supabase.from('posts').select('locality');
 
@@ -132,6 +117,19 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
     };
 
     fetchLocalities();
+
+    Promise.all([fetchCategories(), fetchSubcategories(), fetchSubsubcategories()])
+      .then(([categories, subcategories, subsubcategories]) => {
+        const categoryTree: CategoryTree = generateCategoryTree(
+          categories as ICategory[],
+          subcategories as ISubCategory[],
+          subsubcategories as ISubSubCategory[]
+        );
+        //@ts-ignore
+        dispatch({ type: ACTIONS.SAVE_CATEGORY_TREE, payload: categoryTree });
+      })
+      .catch((error) => console.error('Error creating nested object:', error));
+    fetchTaxSuggestions();
   }, []);
 
   const contextValue = useMemo(() => {
