@@ -11,8 +11,6 @@ import { FormStatusMessage, FormTitle, Input, Label, Textarea } from '@/componen
 import { Button } from '@/components/atoms/Button';
 import { SearchBox } from '@/components/molecules/SearchBox';
 
-import { CategoriesSelection } from '../CategoriesSelection';
-
 const schema = yup.object().shape({
   title: yup.string().required('Title is required'),
   address: yup.string().required('Address is required'),
@@ -117,7 +115,6 @@ export const PostForm = () => {
         >
           Select category
         </div>*/}
-        {showCategories && <CategoriesSelection />}
         <Input name="title" label="Title" register={register} errors={errors.title} />
         {/*           <ErrorMessage errors={errors} name="title" />
          */}
