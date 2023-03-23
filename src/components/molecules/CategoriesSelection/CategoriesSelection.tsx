@@ -85,6 +85,7 @@ export const CategoriesSelection = ({ setOpen }: { setOpen?: (arg0: boolean) => 
       Park,
       ShoppingBag,
       Circle,
+      CaretRight,
       Bed,
       Buildings
     };
