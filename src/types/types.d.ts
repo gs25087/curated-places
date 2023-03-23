@@ -116,16 +116,17 @@ export interface ITaxonomyBase {
 
 export interface ICategory extends ITaxonomyBase {
   icon: string;
+  parent: null;
 }
 
 export interface ISubCategory extends ITaxonomyBase {
   icon: string;
-  category: number;
+  parent: number;
 }
 
 export interface ISubSubCategory extends ITaxonomyBase {
   icon: string;
-  subcategory: number;
+  parent: number;
 }
 
 export type PhosphorIcons = {

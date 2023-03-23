@@ -1,5 +1,14 @@
+import {
+  ForkKnife,
+  Park,
+  ShoppingBag,
+  Circle,
+  CaretRight,
+  Bed,
+  Buildings
+} from '@phosphor-icons/react';
 import { CategoryTree } from 'src/types/taxonomy/taxonomy';
-import { ICategory, ISubCategory, ISubSubCategory } from 'src/types/types';
+import { ICategory, ISubCategory, ISubSubCategory, PhosphorIcons } from 'src/types/types';
 
 export const getDateString = (unixTimestamp: string | undefined) => {
   if (!unixTimestamp) {
@@ -27,7 +36,6 @@ export const extractWidthFromUrl = (url: string) => {
 
   return null;
 };
-
 export const generateCategoryTree = (
   categories: ICategory[],
   subcategories: ISubCategory[],
@@ -37,23 +45,33 @@ export const generateCategoryTree = (
   categories.forEach((category) => {
     categoryTree[category.label] = {
       id: category.id,
+      level: 0,
       label: category.label,
-      subcategories: {}
+      parent: null,
+      subcategories: {},
+      icon: category.icon
     };
     subcategories.forEach((subcategory) => {
-      if (subcategory.category === category.id) {
+      if (subcategory.parent === category.id) {
         categoryTree[category.label].subcategories[subcategory.label] = {
           id: subcategory.id,
+          level: 1,
           label: subcategory.label,
-          subsubcategories: {}
+          parent: subcategory.parent,
+          subcategories: {},
+          icon: ''
         };
         subsubcategories.forEach((subsubcategory) => {
-          if (subsubcategory.subcategory === subcategory.id) {
-            categoryTree[category.label].subcategories[subcategory.label].subsubcategories[
+          if (subsubcategory.parent === subcategory.id) {
+            categoryTree[category.label].subcategories[subcategory.label].subcategories[
               subsubcategory.label
             ] = {
               id: subsubcategory.id,
-              label: subsubcategory.label
+              level: 2,
+              parent: subsubcategory.parent,
+              label: subsubcategory.label,
+              icon: '',
+              subcategories: null
             };
           }
         });

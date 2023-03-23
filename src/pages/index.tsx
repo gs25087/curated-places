@@ -5,7 +5,7 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 import { IPost } from 'src/types/types';
 
-import { PostCard, TaxonomyBar } from '@/components/molecules/';
+import { PostCard /* , TaxonomyBar */ } from '@/components/molecules/';
 import { LocalitiesPopup } from '@/components/molecules/LocalitiesPopup.tsx';
 
 import { taxonomyLevelNames } from '@/lib/taxonomy';
@@ -47,7 +47,8 @@ const HomePage: NextPage = ({ postData }) => {
       </Head>
       {state?.openLocalitiesPopup && state?.localities.length > 0 && <LocalitiesPopup />}
       <div className="relative ">
-        {state?.tax_suggestions && state?.tax_suggestions.length > 0 && <TaxonomyBar />}
+        {/*         {state?.tax_suggestions && state?.tax_suggestions.length > 0 && <TaxonomyBar />}
+         */}{' '}
         {filterPosts(postData).map((post: IPost) => (
           <PostCard
             key={post.id}

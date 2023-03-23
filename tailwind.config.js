@@ -36,7 +36,7 @@ module.exports = {
         pageMarginL: '3rem',
         logoHeight: '2.13rem',
         box: '.5rem',
-        main: 'calc(100vh - 3.15rem)',
+        main: 'calc(100vh - 6rem)', //'calc(100vh - 3.15rem)',
         notHomeMain: 'calc(100vh - 3.7rem)',
         fieldMT: '1.5rem'
       },
