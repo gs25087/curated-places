@@ -90,7 +90,7 @@ export interface ITaxonomyButtonProps {
   label: string;
   level: number;
   id: number;
-  size?: string;
+  size?: 'small' | 'medium';
   filter?: boolean;
 }
 

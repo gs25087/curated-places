@@ -36,9 +36,6 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 
     if (user?.id) {
       fetchUserLocality();
-    } else {
-      //@ts-ignore
-      dispatch({ type: ACTIONS.SET_LOCALITY, payload: 'Berlin' });
     }
   }, []);
 

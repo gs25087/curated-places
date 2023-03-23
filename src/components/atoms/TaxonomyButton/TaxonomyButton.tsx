@@ -1,5 +1,6 @@
 import { useMapContext } from '@/context/MapContext/MapContext';
 import { ACTIONS } from '@/context/MapContext/MapReducer';
+import Chip from '@mui/material/Chip';
 import { IMapContext, ITaxonomyButtonProps } from 'src/types/types';
 
 export const TaxonomyButton = ({
@@ -7,7 +8,7 @@ export const TaxonomyButton = ({
   level,
   filter = false,
   id,
-  size = 'sm'
+  size = 'medium'
 }: ITaxonomyButtonProps): JSX.Element => {
   //@ts-ignore
   const { state, dispatch } = useMapContext<IMapContext>();
@@ -21,20 +22,12 @@ export const TaxonomyButton = ({
   };
 
   return (
-    <>
-      <div
-        {...(filter && { onClick: handleClick })}
-        className={`tap-transparent py-0.25 mr-0.5 flex   items-center gap-x-1 overflow-hidden whitespace-nowrap rounded-full border  border-black px-2 text-sm shadow transition-colors last:mr-0
-        ${size ? 'text-' + size : ''}
-				${filter ? 'cursor-pointer' : ''} 
-        ${
-          state?.taxonomy.id === id && state?.taxonomy.level === level && filter
-            ? 'bg-primary-LIGHT'
-            : 'bg-white'
-        } `}
-      >
-        {label}
-      </div>
-    </>
+    <Chip
+      {...(filter && { onClick: handleClick })}
+      label={label}
+      variant="outlined"
+      size={size}
+      className={`${filter ? 'cursor-pointer' : ''} mr-1 last:mr-0`}
+    />
   );
 };

@@ -77,7 +77,7 @@ export const PostCard = ({
           <h1 className="mb-0.5 w-3/5 font-medium">{post.title}</h1>
           <div className="flex w-2/5 items-start justify-end ">
             {label && level && id && (
-              <TaxonomyButton size={'xs'} label={label} level={level} id={id} />
+              <TaxonomyButton size={'small'} label={label} level={level} id={id} />
             )}
           </div>
         </div>

@@ -17,10 +17,20 @@ export const muiTheme = {
         }
       }
     },
+
     MuiChip: {
       styleOverrides: {
         root: {
-          backgroundColor: 'rgba(256, 256, 256, 1)'
+          color: 'inherit',
+          backgroundColor: '#fafafa',
+          height: '22px'
+        },
+        '&:hover': {
+          backgroundColor: 'red'
+        },
+        labelMedium: {
+          paddingRight: '10px',
+          paddingLeft: '10px'
         }
       }
     },
@@ -44,7 +54,6 @@ export const muiTheme = {
       styleOverrides: {
         root: {
           // Add your global styles for ListItem here
-          backgroundColor: 'transparent',
           borderRadius: '5px',
           marginBottom: '2px'
         }
