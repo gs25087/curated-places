@@ -6,18 +6,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import {
-  ForkKnife,
-  Park,
-  ShoppingBag,
-  Circle,
-  CaretRight,
-  Bed,
-  Buildings
-} from '@phosphor-icons/react';
+import { CaretRight } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
 import { Subcategory } from 'src/types/taxonomy/taxonomy';
-import { ICategory, ISubCategory, PhosphorIcons } from 'src/types/types';
+import { ICategory, ISubCategory } from 'src/types/types';
 
 export const CategoriesSelection = ({ setOpen }: { setOpen?: (arg0: boolean) => void }) => {
   const [categoryTree, setCategoryTree] = useState<ICategory[]>([]);
@@ -79,27 +71,6 @@ export const CategoriesSelection = ({ setOpen }: { setOpen?: (arg0: boolean) => 
     return Object.values(subcategories);
   }
 
-  function renderIcon(iconName: string) {
-    const PhosphorIcons: PhosphorIcons = {
-      ForkKnife,
-      Park,
-      ShoppingBag,
-      Circle,
-      CaretRight,
-      Bed,
-      Buildings
-    };
-    if (PhosphorIcons[iconName]) {
-      const IconComponent = PhosphorIcons[iconName];
-
-      return <IconComponent size={24} weight="light" />;
-    }
-    // If the icon is not found in the PhosphorIcons library, it could be a custom icon.
-    // You could handle it here by importing and rendering it dynamically as shown in my previous example.
-
-    return <Circle size={22} weight="light" />;
-  }
-
   return (
     <div className="mt-notHomeNavHeight h-[theme(spacing.notHomeMain)] w-full max-w-full  bg-white md:max-w-md">
       <div className="py-pageMarginM px-pageMarginM">
@@ -134,7 +105,7 @@ export const CategoriesSelection = ({ setOpen }: { setOpen?: (arg0: boolean) => 
                     onClick={() => setSelectedCategory(category.id)}
                   >
                     <ListItemButton sx={{ paddingLeft: 0, paddingRight: 0 }}>
-                      <ListItemIcon>{renderIcon(category.icon)}</ListItemIcon>
+                      <ListItemIcon>x</ListItemIcon>
                       <ListItemText primary={category.label} />
                       <IconButton aria-label="comment" sx={{ paddingRight: 0 }}>
                         <CaretRight size={22} weight="light" />
