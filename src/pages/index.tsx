@@ -14,6 +14,8 @@ import { taxonomyLevelNames } from '@/lib/taxonomy';
 const HomePage: NextPage = ({ postData }) => {
   // @ts-ignore
   const { state } = useMapContext();
+  const { categoryTree, subcategories } = state;
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [state?.taxonomy?.id]);
@@ -47,7 +49,7 @@ const HomePage: NextPage = ({ postData }) => {
       </Head>
       {state?.openLocalitiesPopup && state?.localities.length > 0 && <LocalitiesPopup />}
       <div className="relative ">
-        <TaxonomyBar />
+        {subcategories && categoryTree && <TaxonomyBar />}
         {filterPosts(postData).map((post: IPost) => (
           <PostCard
             key={post.id}

@@ -13,11 +13,6 @@ const Login = () => {
   const session = useSession();
   const supabase = useSupabaseClient();
 
-  //@ts-ignore
-  const { state } = useMapContext();
-
-  console.log(state);
-
   const router = useRouter();
 
   if (session) {

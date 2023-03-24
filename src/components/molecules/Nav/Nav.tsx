@@ -1,24 +1,15 @@
-import { useMapContext } from '@/context/MapContext/MapContext';
-import { ACTIONS } from '@/context/MapContext/MapReducer';
-import { useUser } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import { FunctionComponent } from 'react';
-import { NavItem } from 'src/types/types';
 
 interface IProps {
   navItems: {
     label: string;
     href: string;
-    icon: FunctionComponent<{ size: number }>;
     authRequired: boolean;
   }[];
 }
 
-export const Nav: FunctionComponent<IProps> = ({ navItems }): JSX.Element => {
-  const user = useUser();
-  // @ts-ignore
-  const { dispatch } = useMapContext();
-
+export const Nav: FunctionComponent<IProps> = (): JSX.Element => {
   return (
     <nav className="bg-secondary-light dark:bg-secondary-dark fixed top-0 left-1/2 z-nav mx-auto flex w-full -translate-x-1/2 transform flex-wrap items-center justify-between  bg-white md:max-w-md">
       <div className="flex h-navHeight w-full justify-between px-pageMargin">
@@ -30,27 +21,7 @@ export const Nav: FunctionComponent<IProps> = ({ navItems }): JSX.Element => {
           </div>
         </Link>
 
-        <div className="flex justify-between gap-x-2">
-          {navItems.map(
-            (item: NavItem) =>
-              (!item.authRequired || (!!user && item.authRequired)) && (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="box-content flex h-logoHeight items-center py-pageMargin "
-                  onClick={() => {
-                    if (item.label === 'Location') {
-                      dispatch({ type: ACTIONS.OPEN_LOCALITIESPOPUP, payload: true });
-                    }
-                  }}
-                >
-                  <div className="text-highlight-light flex  items-center px-1 text-xl text-black transition hover:scale-[0.98]">
-                    <item.icon size={30} weight="thin" />
-                  </div>
-                </Link>
-              )
-          )}
-        </div>
+        <div className="flex justify-between gap-x-2"></div>
       </div>
     </nav>
   );

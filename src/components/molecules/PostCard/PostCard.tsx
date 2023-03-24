@@ -1,6 +1,3 @@
-import { BookmarkSimple } from '@phosphor-icons/react';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { IAuthor, IPostCardProps } from 'src/types/types';
@@ -84,9 +81,7 @@ export const PostCard = ({
         <div className="flex flex-wrap items-end">
           <div className="w-4/6 text-xs text-gray-500">{post.description}</div>
           <div className=" flex w-2/6 flex-col items-end text-right text-2xs text-black underline">
-            <div className="mb-2 hidden text-right text-gray-400">
-              <BookmarkSimple size={20} weight="light" />
-            </div>
+            <div className="mb-2 hidden text-right text-gray-400"></div>
             {/*             {!isProfile && <Link href={`/profile/${post.author}`}>{author}</Link>}
              */}{' '}
           </div>
