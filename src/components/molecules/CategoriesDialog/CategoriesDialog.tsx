@@ -1,20 +1,7 @@
 import { useMapContext } from '@/context/MapContext/MapContext';
-import {
-  Dialog,
-  DialogTitle,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  IconButton
-} from '@mui/material';
+import { Dialog, DialogTitle, List, ListItem, ListItemText } from '@mui/material';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import {
-  CaretRight as ArrowRightIcon,
-  CaretLeft as ArrowBackIcon,
-  X as CloseIcon
-} from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
 import {
   CategoryTreeCategory,
@@ -107,7 +94,7 @@ export const CategoriesDialog: React.FC<ICategoriesDialogProps> = ({
     >
       <DialogTitle>
         <div onClick={handleBackClick} className="mr-2">
-          {currentLevel === 0 ? <CloseIcon /> : <ArrowBackIcon />}
+          {currentLevel === 0 ? <div>{'X'}</div> : <div>{'<'}</div>}
         </div>
         Categories
       </DialogTitle>
@@ -116,7 +103,7 @@ export const CategoriesDialog: React.FC<ICategoriesDialogProps> = ({
           <ListItem key={category.id} onClick={() => handleCategoryClick(category)}>
             <ListItemText primary={category.label} />
             {category.subcategories && Object.keys(category.subcategories).length > 0 && (
-              <ArrowRightIcon />
+              <div>{'>'}</div>
             )}
           </ListItem>
         ))}
