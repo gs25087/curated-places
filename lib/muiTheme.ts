@@ -27,7 +27,8 @@ export const muiTheme = {
         root: {
           color: 'inherit',
           backgroundColor: '#fafafa',
-          height: '22px'
+          height: '22px',
+          margin: 'auto'
         },
         '&:hover': {
           backgroundColor: 'red'
