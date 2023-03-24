@@ -14,11 +14,7 @@ export const muiTheme = {
           // Add your global styles for ListItem here
           width: '100%',
           maxWidth: 'none'
-        }
-      }
-    },
-    MuiBackdrop: {
-      styleOverrides: {
+        },
         root: {
           ':before': {
             content: '""',
