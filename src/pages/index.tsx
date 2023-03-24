@@ -5,7 +5,7 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 import { IPost } from 'src/types/types';
 
-import { PostCard /* , TaxonomyBar */ } from '@/components/molecules/';
+import { PostCard, TaxonomyBar } from '@/components/molecules/';
 import { LocalitiesPopup } from '@/components/molecules/LocalitiesPopup.tsx';
 
 import { taxonomyLevelNames } from '@/lib/taxonomy';
@@ -18,26 +18,6 @@ const HomePage: NextPage = ({ postData }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [state?.taxonomy.id]);
 
-  const filterPosts = (posts: IPost[]) => {
-    return posts.filter((post: IPost) => {
-      if (
-        state &&
-        state.taxonomy.id &&
-        state.taxonomy.level &&
-        (state.locality === '' || post?.locality === state.locality)
-      ) {
-        const stateTaxonomyLevel = state.taxonomy.level as keyof typeof taxonomyLevelNames;
-        const taxonomyName = taxonomyLevelNames[stateTaxonomyLevel] as string;
-
-        return post[taxonomyName as keyof IPost] === state.taxonomy.id;
-      } else if (!state.taxonomy.id && !state.taxonomy.level && state.locality !== '') {
-        return post?.locality === state.locality;
-      } else if (!state.taxonomy.id && !state.taxonomy.level && state.locality === '') {
-        return true;
-      }
-    });
-  };
-
   return (
     <>
       <Head>
@@ -47,9 +27,8 @@ const HomePage: NextPage = ({ postData }) => {
       </Head>
       {state?.openLocalitiesPopup && state?.localities.length > 0 && <LocalitiesPopup />}
       <div className="relative ">
-        {/*         {state?.tax_suggestions && state?.tax_suggestions.length > 0 && <TaxonomyBar />}
-         */}{' '}
-        {filterPosts(postData).map((post: IPost) => (
+        {state?.tax_suggestions && state?.tax_suggestions.length > 0 && <TaxonomyBar />}
+        {postData.map((post: IPost) => (
           <PostCard
             key={post.id}
             post={post}

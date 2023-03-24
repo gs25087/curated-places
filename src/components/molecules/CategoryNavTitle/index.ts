@@ -1,1 +1,0 @@
-export { CategoryNavTitle } from './CategoryNavTitle';

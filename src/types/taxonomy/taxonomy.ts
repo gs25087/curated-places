@@ -1,37 +1,35 @@
-export type SubSubCategory = {
+export type CategoryTreeSubSubCategory = {
   id: number;
   subcategories: null;
-
   label: string;
   level: number;
   parent: number;
   icon?: string;
 };
 
-export type SubCategory = {
+export type CategoryTreeSubCategory = {
   id: number;
   label: string;
-  subcategories: Record<string, SubSubCategory>;
+  subcategories: Record<string, CategoryTreeSubSubCategory>;
   level: number;
   parent: number;
   icon?: string;
 };
 
-export type Category = {
+export type CategoryTreeCategory = {
   id: number;
   label: string;
-  subcategories: Record<string, SubCategory>;
+  subcategories: Record<string, CategoryTreeSubCategory>;
   level: number;
   parent: null;
   icon: string;
 };
 
-export type CategoryTree = Record<string, Category>;
+export type CategoryTree = Record<string, CategoryTreeCategory>;
 
 export interface ISelectedTaxonomy {
   id: number | null;
   level: number | null;
-  parent: number | null;
 }
 
 export interface ICategoryNavTitleProps {
@@ -39,4 +37,10 @@ export interface ICategoryNavTitleProps {
   selectedTaxonomy: ISelectedTaxonomy;
   setSelectedTaxonomy: (arg0: ISelectedTaxonomy) => void;
   setOpen: ((arg0: boolean) => void) | undefined;
+}
+
+export interface ICategoriesDialogProps {
+  setOpen: (isOpen: boolean) => void;
+  open: boolean;
+  setSelection: (selection: ISelectedTaxonomy | null) => void;
 }
