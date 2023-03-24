@@ -1,6 +1,7 @@
 import { useMapContext } from '@/context/MapContext/MapContext';
 import { ACTIONS } from '@/context/MapContext/MapReducer';
 import Chip from '@mui/material/Chip';
+import { DotsThree } from '@phosphor-icons/react';
 import { FC, useEffect, useState } from 'react';
 import React from 'react';
 import { ISelectedTaxonomy } from 'src/types/taxonomy/taxonomy';
@@ -9,7 +10,6 @@ import { ISubCategory } from 'src/types/types';
 import { TaxonomyButton } from '@/components/atoms/TaxonomyButton';
 
 import { CategoriesDialog } from '../CategoriesDialog';
-import { DotsThree } from '@phosphor-icons/react';
 
 export const TaxonomyBar: FC = () => {
   //@ts-ignore

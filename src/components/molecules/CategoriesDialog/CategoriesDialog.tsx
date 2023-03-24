@@ -10,6 +10,11 @@ import {
 } from '@mui/material';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
+import {
+  CaretRight as ArrowRightIcon,
+  CaretLeft as ArrowBackIcon,
+  X as CloseIcon
+} from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
 import {
   CategoryTreeCategory,
@@ -101,12 +106,9 @@ export const CategoriesDialog: React.FC<ICategoriesDialogProps> = ({
       aria-describedby="taxonomy-dialog-description"
     >
       <DialogTitle>
-        <IconButton
-          edge="start"
-          color="inherit"
-          onClick={handleBackClick}
-          sx={{ mr: 2 }}
-        ></IconButton>
+        <IconButton edge="start" color="inherit" onClick={handleBackClick} sx={{ mr: 2 }}>
+          {currentLevel === 0 ? <CloseIcon /> : <ArrowBackIcon />}
+        </IconButton>
         Categories
       </DialogTitle>
       <List>
@@ -114,7 +116,9 @@ export const CategoriesDialog: React.FC<ICategoriesDialogProps> = ({
           <ListItem key={category.id} onClick={() => handleCategoryClick(category)}>
             <ListItemText primary={category.label} />
             {category.subcategories && Object.keys(category.subcategories).length > 0 && (
-              <ListItemIcon></ListItemIcon>
+              <ListItemIcon>
+                <ArrowRightIcon />
+              </ListItemIcon>
             )}
           </ListItem>
         ))}
