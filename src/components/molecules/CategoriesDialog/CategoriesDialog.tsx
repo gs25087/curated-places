@@ -106,9 +106,9 @@ export const CategoriesDialog: React.FC<ICategoriesDialogProps> = ({
       aria-describedby="taxonomy-dialog-description"
     >
       <DialogTitle>
-        <IconButton edge="start" color="inherit" onClick={handleBackClick} sx={{ mr: 2 }}>
+        <div onClick={handleBackClick} className="mr-2">
           {currentLevel === 0 ? <CloseIcon /> : <ArrowBackIcon />}
-        </IconButton>
+        </div>
         Categories
       </DialogTitle>
       <List>
@@ -116,9 +116,7 @@ export const CategoriesDialog: React.FC<ICategoriesDialogProps> = ({
           <ListItem key={category.id} onClick={() => handleCategoryClick(category)}>
             <ListItemText primary={category.label} />
             {category.subcategories && Object.keys(category.subcategories).length > 0 && (
-              <ListItemIcon>
-                <ArrowRightIcon />
-              </ListItemIcon>
+              <ArrowRightIcon />
             )}
           </ListItem>
         ))}

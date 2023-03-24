@@ -1,7 +1,6 @@
 import { useMapContext } from '@/context/MapContext/MapContext';
 import { ACTIONS } from '@/context/MapContext/MapReducer';
 import Chip from '@mui/material/Chip';
-import { DotsThree } from '@phosphor-icons/react';
 import { FC, useEffect, useState } from 'react';
 import React from 'react';
 import { ISelectedTaxonomy } from 'src/types/taxonomy/taxonomy';
@@ -49,13 +48,7 @@ export const TaxonomyBar: FC = () => {
                   />
                 )
             )}
-            <Chip
-              icon={<DotsThree />}
-              label="More"
-              variant="outlined"
-              size="small"
-              onClick={handleClick}
-            />
+            <Chip label="More" variant="outlined" size="small" onClick={handleClick} />
           </>
         ) : null}
 
