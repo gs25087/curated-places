@@ -1,7 +1,7 @@
-import { BookmarkSimple } from '@phosphor-icons/react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { BookmarkSimple } from 'phosphor-react';
 import React, { useEffect, useState } from 'react';
 import { IAuthor, IPostCardProps } from 'src/types/types';
 
