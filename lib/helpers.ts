@@ -1,14 +1,5 @@
-import {
-  ForkKnife,
-  Park,
-  ShoppingBag,
-  Circle,
-  CaretRight,
-  Bed,
-  Buildings
-} from '@phosphor-icons/react';
 import { CategoryTree } from 'src/types/taxonomy/taxonomy';
-import { ICategory, ISubCategory, ISubSubCategory, PhosphorIcons } from 'src/types/types';
+import { ICategory, ISubCategory, ISubSubCategory } from 'src/types/types';
 
 export const getDateString = (unixTimestamp: string | undefined) => {
   if (!unixTimestamp) {

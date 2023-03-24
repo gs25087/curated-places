@@ -25,6 +25,8 @@ export const initialState = {
 };
 
 export const MapReducer = (state: IMapContext, action: Action) => {
+  console.log('state', state);
+  console.log('action', action);
   switch (action.type) {
     case ACTIONS.SET_TAXONOMY: {
       return {

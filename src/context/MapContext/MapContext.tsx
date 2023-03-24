@@ -114,6 +114,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
     };
 
     fetchLocalities();
+    fetchTaxSuggestions();
 
     Promise.all([fetchCategories(), fetchSubcategories(), fetchSubsubcategories()])
       .then(([categories, subcategories, subsubcategories]) => {
@@ -122,12 +123,10 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
           subcategories as ISubCategory[],
           subsubcategories as ISubSubCategory[]
         );
-        console.log('cat tree', categoryTree);
         //@ts-ignore
         dispatch({ type: ACTIONS.SAVE_CATEGORY_TREE, payload: categoryTree });
       })
       .catch((error) => console.error('Error creating nested object:', error));
-    fetchTaxSuggestions();
   }, []);
 
   const contextValue = useMemo(() => {

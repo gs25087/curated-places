@@ -48,6 +48,17 @@ const HomePage: NextPage = ({ postData }) => {
       {state?.openLocalitiesPopup && state?.localities.length > 0 && <LocalitiesPopup />}
       <div className="relative ">
         <TaxonomyBar />
+        {filterPosts(postData).map((post: IPost) => (
+          <PostCard
+            key={post.id}
+            post={post}
+            category={post.category}
+            subcategory={post.subcategory}
+            subcategory_2={post.subcategory_2}
+            subsubcategory={post.subsubcategory}
+            subsubcategory_2={post.subsubcategory_2}
+          />
+        ))}
       </div>
     </>
   );
