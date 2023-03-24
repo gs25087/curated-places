@@ -9,6 +9,7 @@ import { ISubCategory } from 'src/types/types';
 import { TaxonomyButton } from '@/components/atoms/TaxonomyButton';
 
 import { CategoriesDialog } from '../CategoriesDialog';
+import { DotsThree } from '@phosphor-icons/react';
 
 export const TaxonomyBar: FC = () => {
   //@ts-ignore

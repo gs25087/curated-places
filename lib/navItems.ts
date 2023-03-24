@@ -1,5 +1,7 @@
+import { Plus, User, MapPin } from '@phosphor-icons/react';
+
 export const navItems = [
-  { href: '/', label: 'Location', authRequired: false },
-  { href: '/posts/add', label: 'New post', authRequired: true },
-  { href: '/login/', label: 'Login', authRequired: false }
+  { href: '/', icon: MapPin, label: 'Location', authRequired: false },
+  { href: '/posts/add', icon: Plus, label: 'New post', authRequired: true },
+  { href: '/login/', icon: User, label: 'Login', authRequired: false }
 ];
