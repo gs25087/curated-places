@@ -43,7 +43,14 @@ export const CategoriesDialog: React.FC<ICategoriesDialogProps> = ({
   //@ts-ignore
   const { state } = useMapContext<IMapContext>();
   const { categoryTree } = state;
-  const [currentCategories, setCurrentCategories] = useState<any>(categoryTree);
+  const [currentCategories, setCurrentCategories] = useState<any>({});
+
+  useEffect(() => {
+    if (open) {
+      setCurrentCategories(categoryTree);
+    }
+  }, [categoryTree, open]);
+
   const restoreCategories = () => {
     setCurrentLevel(0);
     setCurrentParent(null);

@@ -15,16 +15,9 @@ export const muiTheme = {
           width: '100%',
           maxWidth: 'none'
         },
-        root: {
-          ':before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            filter: 'blur(10px)'
-          }
+        backdrop: {
+          backgroundColor: 'rgba(0, 255, 0, 0.1',
+          backdropFilter: 'blur(16px)'
         }
       }
     },

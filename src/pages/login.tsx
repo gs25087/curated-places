@@ -1,3 +1,4 @@
+import { useMapContext } from '@/context/MapContext/MapContext';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Auth } from '@supabase/auth-ui-react';
 import { useRouter } from 'next/router';
@@ -11,6 +12,11 @@ import { Account } from '@/components/molecules';
 const Login = () => {
   const session = useSession();
   const supabase = useSupabaseClient();
+
+  //@ts-ignore
+  const { state } = useMapContext();
+
+  console.log(state);
 
   const router = useRouter();
 
